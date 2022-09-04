@@ -126,5 +126,7 @@ class Mat4x4() {
                 0.0, 0.0, 0.0, 1.0
             )
         }
+
+        fun rotate(rotation: Rotation): Mat4x4 = this.rotate(rotation.axis, rotation.theta)
     }
 }

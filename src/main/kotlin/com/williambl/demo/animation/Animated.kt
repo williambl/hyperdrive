@@ -28,6 +28,7 @@ abstract class Animated<T>(first: T, vararg rest: Keyframe<T>) {
     }
 
     fun add(keyframe: Keyframe<T>) {
+        this.keyframes.removeAll { it.time == keyframe.time }
         this.keyframes.add(this.keyframes.indexOfLast { it.time < keyframe.time } + 1, keyframe)
     }
 

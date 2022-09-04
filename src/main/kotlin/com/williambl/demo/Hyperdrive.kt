@@ -1,16 +1,19 @@
 package com.williambl.demo
 
+import com.williambl.demo.animation.AnimatedTransform
 import com.williambl.demo.model.TexturedModel
 import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.texture.TextureManager
 import com.williambl.demo.util.Mat4x4
 import com.williambl.demo.util.MatrixStack
+import com.williambl.demo.util.Rotation
 import com.williambl.demo.util.Vec3
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil.NULL
+import kotlin.math.PI
 
 object Hyperdrive {
 
@@ -28,19 +31,37 @@ object Hyperdrive {
         this.initGl()
 
         this.renderables.add(
-            TexturedModel(
-                floatArrayOf(
-                    0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // top right
-                    0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,   // bottom right
-                    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,   // bottom left
-                    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f    // top left
-                ),
-                intArrayOf(
-                    0, 1, 3,
-                    1, 2, 3
-                ),
-                ShaderManager.getOrCreateShaderProgram("flatTextured"),
-                TextureManager.getOrCreateTexture("/will.png")
+            WorldObject(
+                AnimatedTransform().also {
+                    it[0.0] = {
+                        //position = Vec3(0.0, 0.0, 0.0)
+                        rotation = Rotation(Vec3(0.0, 1.0, 0.0), 0.0)
+                    }
+
+                    it[5.0] = {
+                        //position = Vec3(0.0, 2.0, 0.0)
+                        rotation = Rotation(Vec3(0.0, 1.0, 0.0), PI * 4)
+                        scale = Vec3(1.0, 1.0, 1.0)
+                    }
+
+                    it[10.0] = {
+                        scale = Vec3(5.0, 1.0, 1.0)
+                    }
+                },
+                TexturedModel(
+                    floatArrayOf(
+                        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // top right
+                        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,   // bottom right
+                        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,   // bottom left
+                        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f    // top left
+                    ),
+                    intArrayOf(
+                        0, 1, 3,
+                        1, 2, 3
+                    ),
+                    ShaderManager.getOrCreateShaderProgram("flatTextured"),
+                    TextureManager.getOrCreateTexture("/will.png")
+                )
             ).also { it.setup() }
         )
 
@@ -102,11 +123,7 @@ object Hyperdrive {
         // invoked during this call.
         glfwPollEvents()
 
-        val modelMatrices = MatrixStack()
-        modelMatrices.autoPop {
-            modelMatrices.push(Mat4x4.rotate(Vec3(0.0, 1.0, 0.0), glfwGetTime()))
-            this.renderables.forEach { it.render(RenderingContext(modelMatrices)) }
-        }
+        this.renderables.forEach { it.render(RenderingContext(MatrixStack(), glfwGetTime())) }
 
         // Swap the color buffers
         glfwSwapBuffers(this.window)
