@@ -11,9 +11,9 @@ class AnimatedTexturedMesh(vertices: FloatArray, indices: IntArray, shaderProgra
 
     private var currentTextureIndex: Int = 0
 
-    override fun render() {
+    override fun render(ctx: RenderingContext) {
         this.currentTextureIndex = (this.currentTextureIndex + 1) % this.textures.size
         this.texture = this.textures[this.currentTextureIndex]
-        super.render()
+        super.render(ctx)
     }
 }

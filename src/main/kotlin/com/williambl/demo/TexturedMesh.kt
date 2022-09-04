@@ -1,5 +1,6 @@
 package com.williambl.demo
 
+import org.lwjgl.opengl.GL40
 import org.lwjgl.opengl.GL45
 import org.lwjgl.opengl.GL45.*
 
@@ -43,8 +44,9 @@ open class TexturedMesh(protected val vertices: FloatArray, protected val indice
         this.isSetup = true
     }
 
-    override fun render() {
+    override fun render(ctx: RenderingContext) {
         this.shaderProgram.use()
+        this.shaderProgram.setUniform("modelMat", ctx.modelStack.value())
         this.texture.bind()
         glBindVertexArray(this.vao[0])
         glDrawElements(GL_TRIANGLES, this.indices.size, GL_UNSIGNED_INT, 0)

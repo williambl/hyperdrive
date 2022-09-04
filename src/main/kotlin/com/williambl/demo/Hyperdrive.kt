@@ -97,7 +97,11 @@ object Hyperdrive {
         // invoked during this call.
         glfwPollEvents()
 
-        this.renderables.forEach(Renderable::render)
+        val modelMatrices = MatrixStack()
+        modelMatrices.autoPop {
+            modelMatrices.push(Mat4x4.rotate(Vec3(0.0, 1.0, 0.0), glfwGetTime()))
+            this.renderables.forEach { it.render(RenderingContext(modelMatrices)) }
+        }
 
         // Swap the color buffers
         glfwSwapBuffers(this.window)

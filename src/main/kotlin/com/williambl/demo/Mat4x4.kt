@@ -75,6 +75,27 @@ class Mat4x4() {
         }[column] = value
     }
 
+    fun forGl(): FloatArray {
+        return floatArrayOf(
+            this[0, 0].toFloat(),
+            this[1, 0].toFloat(),
+            this[2, 0].toFloat(),
+            this[3, 0].toFloat(),
+            this[0, 1].toFloat(),
+            this[1, 1].toFloat(),
+            this[2, 1].toFloat(),
+            this[3, 1].toFloat(),
+            this[0, 2].toFloat(),
+            this[1, 2].toFloat(),
+            this[2, 2].toFloat(),
+            this[3, 2].toFloat(),
+            this[0, 3].toFloat(),
+            this[1, 3].toFloat(),
+            this[2, 3].toFloat(),
+            this[3, 3].toFloat()
+        )
+    }
+
     companion object {
         fun scale(amount: Vec3): Mat4x4 {
             return Mat4x4(
