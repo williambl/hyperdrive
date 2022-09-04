@@ -14,13 +14,32 @@ object Hyperdrive {
     var windowWidth: Int = 640
     var windowTitle: String = "Hyperdrive"
 
+    val renderables = mutableListOf<Renderable>()
+
 
     @JvmStatic
     fun main(args: Array<String>) {
         this.initGlfw()
         this.initGl()
 
-        while (!glfwWindowShouldClose(window)) {
+        this.renderables.add(
+            TexturedMesh(
+                floatArrayOf(
+                    0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // top right
+                    0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,   // bottom right
+                    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,   // bottom left
+                    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f    // top left
+                ),
+                intArrayOf(
+                    0, 1, 3,
+                    1, 2, 3
+                ),
+                ShaderManager.getOrCreateShaderProgram("flatTextured"),
+                TextureManager.getOrCreateTexture("/will.png")
+            ).also { it.setup() }
+        )
+
+        while (!glfwWindowShouldClose(this.window)) {
             this.renderLoop()
         }
     }
@@ -43,24 +62,24 @@ object Hyperdrive {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5)
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
 
-        window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, NULL, NULL)
-        if (window == NULL) {
+        this.window = glfwCreateWindow(this.windowWidth, this.windowHeight, this.windowTitle, NULL, NULL)
+        if (this.window == NULL) {
             throw RuntimeException("Failed to create the GLFW window")
         }
 
         // Make the OpenGL context current
-        glfwMakeContextCurrent(window)
+        glfwMakeContextCurrent(this.window)
         // Enable v-sync
         glfwSwapInterval(1)
 
-        glfwSetFramebufferSizeCallback(window) { _, width, height ->
+        glfwSetFramebufferSizeCallback(this.window) { _, width, height ->
             glViewport(0, 0, width, height)
-            windowWidth = width
-            windowHeight = height
+            this.windowWidth = width
+            this.windowHeight = height
         }
 
         // Make the window visible
-        glfwShowWindow(window)
+        glfwShowWindow(this.window)
     }
 
     private fun initGl() {
@@ -77,6 +96,8 @@ object Hyperdrive {
         // Poll for window events. The key callback above will only be
         // invoked during this call.
         glfwPollEvents()
+
+        this.renderables.forEach(Renderable::render)
 
         // Swap the color buffers
         glfwSwapBuffers(this.window)
