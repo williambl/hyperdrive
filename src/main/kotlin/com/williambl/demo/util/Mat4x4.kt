@@ -108,9 +108,9 @@ class Mat4x4() {
 
         fun translate(offset: Vec3): Mat4x4 {
             return Mat4x4().also { mat ->
-                mat[3, 0] = offset.x
-                mat[3, 1] = offset.y
-                mat[3, 2] = offset.z
+                mat[0, 3] = offset.x
+                mat[1, 3] = offset.y
+                mat[2, 3] = offset.z
             }
         }
 

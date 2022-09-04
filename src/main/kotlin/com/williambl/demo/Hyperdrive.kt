@@ -34,12 +34,12 @@ object Hyperdrive {
             WorldObject(
                 AnimatedTransform().also {
                     it[0.0] = {
-                        //position = Vec3(0.0, 0.0, 0.0)
+                        position = Vec3(0.0, 0.0, 0.0)
                         rotation = Rotation(Vec3(0.0, 1.0, 0.0), 0.0)
                     }
 
                     it[5.0] = {
-                        //position = Vec3(0.0, 2.0, 0.0)
+                        position = Vec3(0.0, 1.0, 0.0)
                         rotation = Rotation(Vec3(0.0, 1.0, 0.0), PI * 4)
                         scale = Vec3(1.0, 1.0, 1.0)
                     }
