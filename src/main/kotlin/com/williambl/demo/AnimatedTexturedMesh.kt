@@ -1,6 +1,6 @@
 package com.williambl.demo
 
-class AnimatedTexturedMesh(vertices: FloatArray, indices: FloatArray, shaderProgram: ShaderProgram, private vararg val textures: Texture) :
+class AnimatedTexturedMesh(vertices: FloatArray, indices: IntArray, shaderProgram: ShaderProgram, private vararg val textures: Texture) :
     TexturedMesh(vertices, indices, shaderProgram, textures[0]) {
 
     init {
