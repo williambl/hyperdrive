@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.21"
+    application
 }
 
 group = "com.williambl.demo"
@@ -12,6 +13,8 @@ val lwjglNatives = "natives-linux"
 repositories {
     mavenCentral()
 }
+
+
 
 dependencies {
     testImplementation(kotlin("test"))
@@ -39,3 +42,8 @@ tasks.test {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+application {
+    mainClass.set("com.williambl.demo.Hyperdrive")
+}
+
