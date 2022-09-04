@@ -1,4 +1,6 @@
 package com.williambl.demo
 
-class RenderingContext(val modelStack: MatrixStack) {
+import com.williambl.demo.util.MatrixStack
+
+class RenderingContext(val modelStack: MatrixStack, val time: Double) {
 }

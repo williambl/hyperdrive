@@ -1,4 +1,4 @@
-package com.williambl.demo
+package com.williambl.demo.util
 
 class MatrixStack {
     private val stack: MutableList<Mat4x4> = mutableListOf(Mat4x4())

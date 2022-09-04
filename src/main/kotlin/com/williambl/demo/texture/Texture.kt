@@ -1,5 +1,8 @@
-package com.williambl.demo
+package com.williambl.demo.texture
 
+import com.williambl.demo.freeMemoryManaged
+import com.williambl.demo.toByteBuffer
+import com.williambl.demo.toMemoryManaged
 import org.lwjgl.opengl.GL45.*
 import org.lwjgl.stb.STBImage
 import java.io.IOException

@@ -1,6 +1,11 @@
 package com.williambl.demo
 
-import org.lwjgl.glfw.GLFW
+import com.williambl.demo.model.TexturedModel
+import com.williambl.demo.shader.ShaderManager
+import com.williambl.demo.texture.TextureManager
+import com.williambl.demo.util.Mat4x4
+import com.williambl.demo.util.MatrixStack
+import com.williambl.demo.util.Vec3
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
@@ -23,7 +28,7 @@ object Hyperdrive {
         this.initGl()
 
         this.renderables.add(
-            TexturedMesh(
+            TexturedModel(
                 floatArrayOf(
                     0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // top right
                     0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,   // bottom right

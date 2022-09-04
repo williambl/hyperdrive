@@ -1,7 +1,8 @@
-package com.williambl.demo
+package com.williambl.demo.shader
 
+import com.williambl.demo.util.Mat4x4
+import com.williambl.demo.util.Vec3
 import org.lwjgl.opengl.GL20.*
-import org.lwjgl.opengl.GL40
 
 /**
  * A representation of an OpenGL Shader Program (i.e. a fragment and vertex shader pair).

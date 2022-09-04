@@ -1,7 +1,11 @@
-package com.williambl.demo
+package com.williambl.demo.model
 
-class AnimatedTexturedMesh(vertices: FloatArray, indices: IntArray, shaderProgram: ShaderProgram, private vararg val textures: Texture) :
-    TexturedMesh(vertices, indices, shaderProgram, textures[0]) {
+import com.williambl.demo.RenderingContext
+import com.williambl.demo.shader.ShaderProgram
+import com.williambl.demo.texture.Texture
+
+class AnimatedTexturedModel(vertices: FloatArray, indices: IntArray, shaderProgram: ShaderProgram, private vararg val textures: Texture) :
+    TexturedModel(vertices, indices, shaderProgram, textures[0]) {
 
     init {
         if (this.textures.isEmpty()) {

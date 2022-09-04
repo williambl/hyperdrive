@@ -1,10 +1,13 @@
-package com.williambl.demo
+package com.williambl.demo.model
 
-import org.lwjgl.opengl.GL40
-import org.lwjgl.opengl.GL45
+import com.williambl.demo.Renderable
+import com.williambl.demo.RenderingContext
+import com.williambl.demo.shader.ShaderProgram
+import com.williambl.demo.texture.Texture
 import org.lwjgl.opengl.GL45.*
 
-open class TexturedMesh(protected val vertices: FloatArray, protected val indices: IntArray, protected val shaderProgram: ShaderProgram, var texture: Texture): Renderable {
+open class TexturedModel(protected val vertices: FloatArray, protected val indices: IntArray, protected val shaderProgram: ShaderProgram, var texture: Texture):
+    Renderable {
     private val vbo: IntArray = intArrayOf(0)
     private val vao: IntArray = intArrayOf(0)
     private val ebo: IntArray = intArrayOf(0)

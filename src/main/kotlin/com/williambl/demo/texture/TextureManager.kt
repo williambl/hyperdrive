@@ -1,4 +1,4 @@
-package com.williambl.demo
+package com.williambl.demo.texture
 
 object TextureManager {
     private val textures: MutableMap<String, Texture> = mutableMapOf()
@@ -9,6 +9,6 @@ object TextureManager {
      * The texture file can be in any format supported by [org.lwjgl.stb.STBImage].
      */
     fun getOrCreateTexture(location: String): Texture {
-        return this.textures.getOrPut(location) { Texture(location) }
+        return textures.getOrPut(location) { Texture(location) }
     }
 }

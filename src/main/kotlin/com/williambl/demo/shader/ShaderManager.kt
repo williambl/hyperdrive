@@ -1,4 +1,4 @@
-package com.williambl.demo
+package com.williambl.demo.shader
 
 import org.lwjgl.opengl.GL45
 import java.io.FileNotFoundException
@@ -24,7 +24,8 @@ object ShaderManager {
                 this::class.java.getResource("/shaders/$shaderName/$shaderName.vert")?.readText() ?: throw FileNotFoundException("Could not find /shaders/$shaderName/$shaderName.vert"),
                 this::class.java.getResource("/shaders/$shaderName/$shaderName.frag")?.readText() ?: throw FileNotFoundException("/shaders/$shaderName/$shaderName.frag"),
                 shaderName
-            )}
+            )
+        }
     }
 
     private fun createCompleteShaderProgram(vertexShaderSrc: String, fragmentShaderSrc: String, name: String): ShaderProgram {
