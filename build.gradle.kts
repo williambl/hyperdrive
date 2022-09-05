@@ -12,12 +12,15 @@ val lwjglNatives = "natives-linux"
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 
 
 dependencies {
     testImplementation(kotlin("test"))
+
+    implementation("com.williambl.demo:rocket4j:1.0-SNAPSHOT")
 
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 

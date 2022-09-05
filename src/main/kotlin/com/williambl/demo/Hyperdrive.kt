@@ -1,19 +1,19 @@
 package com.williambl.demo
 
 import com.williambl.demo.animation.AnimatedDouble
-import com.williambl.demo.animation.AnimatedTransform
+import com.williambl.demo.animation.RocketTransform
 import com.williambl.demo.model.TexturedModel
+import com.williambl.demo.rocket4j.Rocket4J
+import com.williambl.demo.rocket4j.TimeController
 import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.texture.TextureManager
 import com.williambl.demo.util.MatrixStack
-import com.williambl.demo.util.Rotation
-import com.williambl.demo.util.Vec3
+import com.williambl.demo.util.Time
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil.NULL
-import kotlin.math.PI
 
 object Hyperdrive {
 
@@ -22,14 +22,10 @@ object Hyperdrive {
     var windowWidth: Int = 640
     var windowTitle: String = "Hyperdrive"
 
-    val camera = Camera(AnimatedTransform().also {
-        it[0.0] = {
-            position = Vec3(0.0, 2.0, 1.21)
-            rotation = Rotation(Vec3(1.0, 0.0, 0.0), 0.2*PI)
-        }
-    }, AnimatedDouble(45.0), this.windowWidth.toDouble()/this.windowHeight.toDouble(), 0.1, 1000.0)
+    val camera = Camera(RocketTransform("camera"), AnimatedDouble.byValue(45.0), this.windowWidth.toDouble()/this.windowHeight.toDouble(), 0.1, 1000.0)
     val renderables = mutableListOf<Renderable>()
 
+    val rocket = Rocket4J.create(TimeController(5))
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -38,17 +34,7 @@ object Hyperdrive {
 
         this.renderables.add(
             WorldObject(
-                AnimatedTransform().also {
-                    it[0.0] = {
-                        position = Vec3(0.0, 0.0, 0.0)
-                        rotation = Rotation(Vec3(0.0, 1.0, 0.0), 0.0)
-                    }
-
-                    it[5.0] = {
-                        position = Vec3(0.0, 1.0, 0.0)
-                        rotation = Rotation(Vec3(0.0, 1.0, 0.0), PI * 2.0)
-                    }
-                },
+                RocketTransform("will"),
                 TexturedModel(
                     floatArrayOf(
                         0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // top right
@@ -62,6 +48,26 @@ object Hyperdrive {
                     ),
                     ShaderManager.getOrCreateShaderProgram("flatTextured"),
                     TextureManager.getOrCreateTexture("/will.png")
+                )
+            ).also { it.setup() }
+        )
+
+        this.renderables.add(
+            WorldObject(
+                RocketTransform("floor"),
+                TexturedModel(
+                    floatArrayOf(
+                        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+                        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+                        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+                        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
+                    ),
+                    intArrayOf(
+                        0, 1, 3,
+                        1, 2, 3
+                    ),
+                    ShaderManager.getOrCreateShaderProgram("flatTextured"),
+                    TextureManager.getOrCreateTexture("/bottom-text.jpg")
                 )
             ).also { it.setup() }
         )
@@ -113,6 +119,7 @@ object Hyperdrive {
     private fun initGl() {
         GL.createCapabilities()
         glViewport(0, 0, this.windowWidth, this.windowHeight)
+        glEnable(GL_DEPTH_TEST)
         // Set the clear color
         glClearColor(0.2f, 0.5f, 0.8f, 0.0f)
     }
@@ -125,7 +132,8 @@ object Hyperdrive {
         // invoked during this call.
         glfwPollEvents()
 
-        val time = glfwGetTime()
+        this.rocket.update()
+        val time = Time(this.rocket.currentTime, this.rocket.currentRow)
         val context = RenderingContext(MatrixStack(), this.camera.viewMatrix(time), this.camera.projectionMatrix(time), time)
         ShaderManager.setGlobalUniforms(context)
         this.renderables.forEach { it.render(context) }

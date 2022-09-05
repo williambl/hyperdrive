@@ -9,6 +9,10 @@ class Vec3(val x: Double, val y: Double, val z: Double) {
         return Vec3(this.y * other.z - this.z * other.y, this.z * other.x - this.x * other.z, this.x * other.y - this.y * other.x)
     }
 
+    infix fun dot(other: Vec3): Double {
+        return this.x * other.x + this.y * other.y + this.z * other.z
+    }
+
     operator fun times(factor: Double): Vec3 {
         return Vec3(this.x * factor, this.y * factor, this.z * factor)
     }
@@ -23,5 +27,9 @@ class Vec3(val x: Double, val y: Double, val z: Double) {
 
     fun normalised(): Vec3 {
         return if (this.length == 0.0) Vec3(0.0, 0.0, 0.0) else Vec3(this.x / this.length, this.y / this.length, this.z / this.length)
+    }
+
+    override fun toString(): String {
+        return "Vec3(x=$x, y=$y, z=$z)"
     }
 }
