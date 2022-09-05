@@ -18,7 +18,7 @@ class AnimatedTransform(position: Vec3 = Vec3(0.0, 0.0, 0.0), rotation: Rotation
     }
 
     fun getMatrix(time: Double): Mat4x4 {
-        return Mat4x4.scale(this.animatedScale.valueAt(time)) * Mat4x4.rotate(this.animatedRotation.valueAt(time)) * Mat4x4.translate(this.animatedPosition.valueAt(time))
+        return Mat4x4.translate(this.animatedPosition.valueAt(time)) * Mat4x4.rotate(this.animatedRotation.valueAt(time)) * Mat4x4.scale(this.animatedScale.valueAt(time))
     }
 
     class TransformData(var position: Vec3?, var rotation: Rotation?, var scale: Vec3?) {}
