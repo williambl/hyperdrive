@@ -49,7 +49,7 @@ open class TexturedModel(protected val vertices: FloatArray, protected val indic
 
     override fun render(ctx: RenderingContext) {
         this.shaderProgram.use()
-        this.shaderProgram.setUniform("modelMat", ctx.modelStack.value())
+        this.shaderProgram.setUniform("model", ctx.modelStack.value())
         this.texture.bind()
         glBindVertexArray(this.vao[0])
         glDrawElements(GL_TRIANGLES, this.indices.size, GL_UNSIGNED_INT, 0)

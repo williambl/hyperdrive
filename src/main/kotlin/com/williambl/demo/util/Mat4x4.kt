@@ -3,6 +3,7 @@ package com.williambl.demo.util
 import org.jetbrains.annotations.Contract
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.tan
 
 class Mat4x4() {
     private val row1: Array<Double> = arrayOf(1.0, 0.0, 0.0, 0.0)
@@ -128,5 +129,30 @@ class Mat4x4() {
         }
 
         fun rotate(rotation: Rotation): Mat4x4 = this.rotate(rotation.axis, rotation.theta)
+
+        // https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix
+        fun perspective(fov: Double, aspectRatio: Double, nearPlane: Double, farPlane: Double): Mat4x4 {
+            val halfHeight = nearPlane * tan(fov/2.0)
+            val halfWidth = halfHeight * aspectRatio
+            val depth = farPlane - nearPlane
+
+            return Mat4x4(
+                nearPlane/halfWidth, 0.0, 0.0, 0.0,
+                0.0, nearPlane/halfHeight, 0.0, 0.0,
+                0.0, 0.0, -(farPlane+nearPlane)/depth, -2.0 * ((farPlane*nearPlane)/depth),
+                0.0, 0.0, -1.0, 0.0
+            )
+        }
+
+        // https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml
+        fun view(camPos: Vec3, forwards: Vec3, up: Vec3): Mat4x4 {
+            val right = Vec3(0.0, 1.0, 0.0).cross(forwards).normalised()
+            return Mat4x4(
+                right.x, right.y, right.z, 0.0,
+                up.x, up.y, up.z, 0.0,
+                forwards.x, forwards.y, forwards.z, 0.0,
+                0.0, 0.0, 0.0, 1.0
+            ) * this.translate(camPos * -1.0)
+        }
     }
 }

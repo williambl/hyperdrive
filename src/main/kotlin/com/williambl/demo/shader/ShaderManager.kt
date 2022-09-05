@@ -1,5 +1,6 @@
 package com.williambl.demo.shader
 
+import com.williambl.demo.RenderingContext
 import org.lwjgl.opengl.GL45
 import java.io.FileNotFoundException
 
@@ -25,6 +26,13 @@ object ShaderManager {
                 this::class.java.getResource("/shaders/$shaderName/$shaderName.frag")?.readText() ?: throw FileNotFoundException("/shaders/$shaderName/$shaderName.frag"),
                 shaderName
             )
+        }
+    }
+
+    fun setGlobalUniforms(context: RenderingContext) {
+        this.shaders.values.forEach {
+            it.setUniform("view", context.view)
+            it.setUniform("projection", context.projection)
         }
     }
 

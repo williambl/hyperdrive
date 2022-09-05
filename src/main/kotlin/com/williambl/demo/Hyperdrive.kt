@@ -1,10 +1,10 @@
 package com.williambl.demo
 
+import com.williambl.demo.animation.AnimatedDouble
 import com.williambl.demo.animation.AnimatedTransform
 import com.williambl.demo.model.TexturedModel
 import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.texture.TextureManager
-import com.williambl.demo.util.Mat4x4
 import com.williambl.demo.util.MatrixStack
 import com.williambl.demo.util.Rotation
 import com.williambl.demo.util.Vec3
@@ -22,6 +22,12 @@ object Hyperdrive {
     var windowWidth: Int = 640
     var windowTitle: String = "Hyperdrive"
 
+    val camera = Camera(AnimatedTransform().also {
+        it[0.0] = {
+            position = Vec3(0.0, 2.0, 1.21)
+            rotation = Rotation(Vec3(1.0, 0.0, 0.0), 0.2*PI)
+        }
+    }, AnimatedDouble(45.0), this.windowWidth.toDouble()/this.windowHeight.toDouble(), 0.1, 1000.0)
     val renderables = mutableListOf<Renderable>()
 
 
@@ -40,12 +46,7 @@ object Hyperdrive {
 
                     it[5.0] = {
                         position = Vec3(0.0, 1.0, 0.0)
-                        rotation = Rotation(Vec3(0.0, 1.0, 0.0), PI * 4)
-                        scale = Vec3(1.0, 1.0, 1.0)
-                    }
-
-                    it[10.0] = {
-                        scale = Vec3(5.0, 1.0, 1.0)
+                        rotation = Rotation(Vec3(0.0, 1.0, 0.0), PI * 2.0)
                     }
                 },
                 TexturedModel(
@@ -102,6 +103,7 @@ object Hyperdrive {
             glViewport(0, 0, width, height)
             this.windowWidth = width
             this.windowHeight = height
+            this.camera.aspectRatio = this.windowWidth.toDouble()/this.windowHeight.toDouble()
         }
 
         // Make the window visible
@@ -123,7 +125,10 @@ object Hyperdrive {
         // invoked during this call.
         glfwPollEvents()
 
-        this.renderables.forEach { it.render(RenderingContext(MatrixStack(), glfwGetTime())) }
+        val time = glfwGetTime()
+        val context = RenderingContext(MatrixStack(), this.camera.viewMatrix(time), this.camera.projectionMatrix(time), time)
+        ShaderManager.setGlobalUniforms(context)
+        this.renderables.forEach { it.render(context) }
 
         // Swap the color buffers
         glfwSwapBuffers(this.window)
