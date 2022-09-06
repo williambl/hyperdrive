@@ -21,6 +21,7 @@ dependencies {
     testImplementation(kotlin("test"))
 
     implementation("com.williambl.demo:rocket4j:1.0-SNAPSHOT")
+    implementation("org.jetbrains:annotations:20.1.0")
 
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 

@@ -4,7 +4,7 @@ import com.williambl.demo.RenderingContext
 import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
 
-class AnimatedTexturedModel(vertices: FloatArray, indices: IntArray, shaderProgram: ShaderProgram, private vararg val textures: Texture) :
+class AnimatedTexturedModel(vertices: Vertices, indices: IntArray, shaderProgram: ShaderProgram, private vararg val textures: Texture) :
     TexturedModel(vertices, indices, shaderProgram, textures[0]) {
 
     init {

@@ -3,6 +3,10 @@ package com.williambl.demo
 import com.williambl.demo.animation.AnimatedDouble
 import com.williambl.demo.animation.RocketTransform
 import com.williambl.demo.model.TexturedModel
+import com.williambl.demo.model.Vertices
+import com.williambl.demo.model.Vertices.Attribute.Color.color
+import com.williambl.demo.model.Vertices.Attribute.Position.position
+import com.williambl.demo.model.Vertices.Attribute.Texture.tex
 import com.williambl.demo.rocket4j.Rocket4J
 import com.williambl.demo.rocket4j.TimeController
 import com.williambl.demo.shader.ShaderManager
@@ -36,12 +40,11 @@ object Hyperdrive {
             WorldObject(
                 RocketTransform("will"),
                 TexturedModel(
-                    floatArrayOf(
-                        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // top right
-                        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,   // bottom right
-                        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,   // bottom left
-                        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f    // top left
-                    ),
+                    Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture)
+                        .position(0.5, 0.5, 0.0).color(1.0, 0.0, 0.0).tex(1.0, 0.0).next()
+                        .position(0.5, -0.5, 0.0).color(0.0, 1.0, 0.0).tex(1.0, 1.0).next()
+                        .position(-0.5, -0.5, 0.0).color(0.0, 0.0, 1.0).tex(0.0, 1.0).next()
+                        .position(-0.5, 0.5, 0.0).color(1.0, 1.0, 0.0).tex(0.0, 0.0).next(),
                     intArrayOf(
                         0, 1, 3,
                         1, 2, 3
@@ -56,12 +59,11 @@ object Hyperdrive {
             WorldObject(
                 RocketTransform("floor"),
                 TexturedModel(
-                    floatArrayOf(
-                        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-                        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-                        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-                        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
-                    ),
+                    Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture)
+                        .position(0.5, 0.5, 0.0).color(1.0, 0.0, 0.0).tex(1.0, 0.0).next()
+                        .position(0.5, -0.5, 0.0).color(0.0, 1.0, 0.0).tex(1.0, 1.0).next()
+                        .position(-0.5, -0.5, 0.0).color(0.0, 0.0, 1.0).tex(0.0, 1.0).next()
+                        .position(-0.5, 0.5, 0.0).color(1.0, 1.0, 0.0).tex(0.0, 0.0).next(),
                     intArrayOf(
                         0, 1, 3,
                         1, 2, 3
