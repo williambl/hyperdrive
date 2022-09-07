@@ -28,6 +28,10 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
             return
         }
 
+        if (!this.shaderProgram.properties.attributes.contentEquals(this.vertices.attributes)) {
+            throw RuntimeException("Trying to use a shader with different attributes to the vertices!\nShader Program: ${this.shaderProgram.properties.attributes}\nVertices: ${this.vertices.attributes}")
+        }
+
         glGenVertexArrays(this.vao)
         glCreateBuffers(this.vbo)
         glCreateBuffers(this.ebo)

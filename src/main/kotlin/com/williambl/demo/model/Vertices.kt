@@ -37,11 +37,28 @@ class Vertices(vararg val attributes: Attribute<*>) {
         return bytes.rewind()
     }
 
-    open class Attribute<T : Number> protected constructor(val count: @Range(from = 1, to = 4) Int, val klass: KClass<T>) {
+    open class Attribute<T : Number> protected constructor(val count: @Range(from = 1, to = 4) Int, val name: String, val klass: KClass<T>) {
         val width: Int = this.klass.size
         val type: Int = this.klass.glType
         val size: Int = this.count * this.width
-        object Position: Attribute<Float>(3, Float::class) {
+
+        init {
+            byName[this.name] = this
+        }
+
+        override fun toString(): String {
+            return this.name
+        }
+
+        companion object {
+            private val byName: MutableMap<String, Attribute<*>> = mutableMapOf()
+
+            fun byName(name: String): Attribute<*>? {
+                return this.byName[name]
+            }
+        }
+
+        object Position: Attribute<Float>(3, "position", Float::class) {
             fun Vertices.position(x: Float, y: Float, z: Float): Vertices {
                 this[Position].add(x)
                 this[Position].add(y)
@@ -52,7 +69,7 @@ class Vertices(vararg val attributes: Attribute<*>) {
             fun Vertices.position(pos: Vec3): Vertices = this.position(pos.x, pos.y, pos.z)
         }
 
-        object Color: Attribute<Float>(3, Float::class) {
+        object Color: Attribute<Float>(3, "inColor", Float::class) {
             fun Vertices.color(r: Float, g: Float, b: Float): Vertices {
                 this[Color].add(r)
                 this[Color].add(g)
@@ -62,7 +79,7 @@ class Vertices(vararg val attributes: Attribute<*>) {
             fun Vertices.color(r: Double, g: Double, b: Double) = this.color(r.toFloat(), g.toFloat(), b.toFloat())
         }
 
-        object Texture: Attribute<Float>(2, Float::class) {
+        object Texture: Attribute<Float>(2, "inTexCoord", Float::class) {
             fun Vertices.tex(u: Float, v: Float): Vertices {
                 this[Texture].add(u)
                 this[Texture].add(v)
@@ -71,7 +88,7 @@ class Vertices(vararg val attributes: Attribute<*>) {
             fun Vertices.tex(u: Double, v: Double) = this.tex(u.toFloat(), v.toFloat())
         }
 
-        object Normal: Attribute<Float>(3, Float::class) {
+        object Normal: Attribute<Float>(3, "normal", Float::class) {
             fun Vertices.normal(x: Float, y: Float, z: Float): Vertices {
                 this[Normal].add(x)
                 this[Normal].add(y)
@@ -81,9 +98,7 @@ class Vertices(vararg val attributes: Attribute<*>) {
             fun Vertices.normal(x: Double, y: Double, z: Double) = this.normal(x.toFloat(), y.toFloat(), z.toFloat())
             fun Vertices.normal(pos: Vec3) = this.normal(pos.x, pos.y, pos.z)
         }
-
     }
-
 }
 
 private fun ByteBuffer.put(number: Number) {

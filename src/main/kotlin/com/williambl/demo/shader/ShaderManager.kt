@@ -3,6 +3,7 @@ package com.williambl.demo.shader
 import com.williambl.demo.RenderingContext
 import org.lwjgl.opengl.GL45
 import java.io.FileNotFoundException
+import java.io.InputStream
 
 object ShaderManager {
 
@@ -15,6 +16,7 @@ object ShaderManager {
      * ```
      * shaders
      * ├── shaderName
+     * │   ├── shaderName.shad
      * │   ├── shaderName.frag
      * │   └── shaderName.vert
      * ```
@@ -22,8 +24,9 @@ object ShaderManager {
     fun getOrCreateShaderProgram(shaderName: String): ShaderProgram {
         return shaders.getOrPut(shaderName) {
             createCompleteShaderProgram(
+                this::class.java.getResource("/shaders/$shaderName/$shaderName.shad")?.openStream() ?: throw FileNotFoundException("Could not find /shaders/$shaderName/$shaderName.shad"),
                 this::class.java.getResource("/shaders/$shaderName/$shaderName.vert")?.readText() ?: throw FileNotFoundException("Could not find /shaders/$shaderName/$shaderName.vert"),
-                this::class.java.getResource("/shaders/$shaderName/$shaderName.frag")?.readText() ?: throw FileNotFoundException("/shaders/$shaderName/$shaderName.frag"),
+                this::class.java.getResource("/shaders/$shaderName/$shaderName.frag")?.readText() ?: throw FileNotFoundException("Could not find /shaders/$shaderName/$shaderName.frag"),
                 shaderName
             )
         }
@@ -36,13 +39,14 @@ object ShaderManager {
         }
     }
 
-    private fun createCompleteShaderProgram(vertexShaderSrc: String, fragmentShaderSrc: String, name: String): ShaderProgram {
+    private fun createCompleteShaderProgram(shaderPropertiesSrc: InputStream, vertexShaderSrc: String, fragmentShaderSrc: String, name: String): ShaderProgram {
+        val properties = ShaderProperties.fromInput(shaderPropertiesSrc)
         val vertexId = compileShader(vertexShaderSrc, GL45.GL_VERTEX_SHADER)
         val fragmentId = compileShader(fragmentShaderSrc, GL45.GL_FRAGMENT_SHADER)
         val shaderProgramId = createAndLinkShaderProgram(vertexId, fragmentId)
         GL45.glDeleteShader(vertexId)
         GL45.glDeleteShader(fragmentId)
-        return ShaderProgram(name, shaderProgramId)
+        return ShaderProgram(name, properties, shaderProgramId)
     }
 
     private fun compileShader(source: String, type: Int): Int {

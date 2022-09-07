@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL20.*
  *
  * Do not call the constructor, use [ShaderManager.getOrCreateShaderProgram] instead.
  */
-class ShaderProgram(val name: String, private val id: Int) {
+class ShaderProgram(val name: String, val properties: ShaderProperties, private val id: Int) {
     private val uniforms: MutableMap<String, Int> = mutableMapOf()
 
     fun use() {
