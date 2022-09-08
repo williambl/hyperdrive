@@ -7,7 +7,7 @@ import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
 import org.lwjgl.opengl.GL45.*
 
-open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, protected val shaderProgram: ShaderProgram, var texture: Texture):
+open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, val shaderProgram: ShaderProgram, var texture: Texture):
     Renderable {
     private val vbo: IntArray = intArrayOf(0)
     private val vao: IntArray = intArrayOf(0)
@@ -29,7 +29,7 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
         }
 
         if (!this.shaderProgram.properties.attributes.contentEquals(this.vertices.attributes)) {
-            throw RuntimeException("Trying to use a shader with different attributes to the vertices!\nShader Program: ${this.shaderProgram.properties.attributes}\nVertices: ${this.vertices.attributes}")
+            throw RuntimeException("Trying to use a shader with different attributes to the vertices!\nShader Program: ${this.shaderProgram.properties.attributes.contentToString()}\nVertices: ${this.vertices.attributes.contentToString()}")
         }
 
         glGenVertexArrays(this.vao)
