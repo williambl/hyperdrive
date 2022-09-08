@@ -1,6 +1,7 @@
 package com.williambl.demo.shader
 
 import com.williambl.demo.RenderingContext
+import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL45
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -53,6 +54,9 @@ object ShaderManager {
         val shader = GL45.glCreateShader(type)
         GL45.glShaderSource(shader, source)
         GL45.glCompileShader(shader)
+        if (glGetShaderi(shader, GL_COMPILE_STATUS) != GL_TRUE) {
+            throw RuntimeException("Problem compiling shader! ${glGetShaderInfoLog(shader)}")
+        }
         return shader
     }
 
