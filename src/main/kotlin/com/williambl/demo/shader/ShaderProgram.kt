@@ -17,17 +17,24 @@ class ShaderProgram(val name: String, val properties: ShaderProperties, private 
     }
 
     fun setUniform(name: String, value: Mat4x4) {
+        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
-        glUniformMatrix4fv(loc, false, value.forGl())
+        if (loc != -1) {
+            glUniformMatrix4fv(loc, false, value.forGl())
+        }
     }
 
     fun setUniform(name: String, value: Float) {
+        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
         glUniform1f(loc, value)
     }
 
     fun setUniform(name: String, value: Vec3) {
+        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
-        glUniform3f(loc, value.x.toFloat(), value.y.toFloat(), value.z.toFloat())
+        if (loc != -1) {
+            glUniform3f(loc, value.x.toFloat(), value.y.toFloat(), value.z.toFloat())
+        }
     }
 }
