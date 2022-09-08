@@ -30,6 +30,14 @@ class ShaderProgram(val name: String, val properties: ShaderProperties, private 
         glUniform1f(loc, value)
     }
 
+    fun setUniform(name: String, x: Float, y: Float) {
+        this.use()
+        val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
+        if (loc != -1) {
+            glUniform2f(loc, x, y)
+        }
+    }
+
     fun setUniform(name: String, value: Vec3) {
         this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }

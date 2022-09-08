@@ -7,21 +7,17 @@ import com.williambl.demo.model.TexturedModel
 import com.williambl.demo.model.Vertices
 import com.williambl.demo.model.Vertices.Attribute.Color.color
 import com.williambl.demo.model.Vertices.Attribute.Position.position
-import com.williambl.demo.model.Vertices.Attribute.Position2d.position2d
 import com.williambl.demo.model.Vertices.Attribute.Texture.tex
 import com.williambl.demo.rocket4j.Rocket4J
 import com.williambl.demo.rocket4j.TimeController
 import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.texture.TextureManager
-import com.williambl.demo.util.Mat4x4
-import com.williambl.demo.util.MatrixStack
 import com.williambl.demo.util.Time
+import com.williambl.demo.util.applyPostShaderEffect
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL30.*
-import org.lwjgl.opengl.GL45.glBlitNamedFramebuffer
 import org.lwjgl.system.MemoryUtil.NULL
 
 object Hyperdrive {
@@ -33,7 +29,6 @@ object Hyperdrive {
 
     lateinit var camera: Camera
     val renderables = mutableListOf<Renderable>()
-    lateinit var fullScreenQuad: Renderable
 
     val rocket = Rocket4J.create(TimeController(5))
 
@@ -45,20 +40,6 @@ object Hyperdrive {
         this.camera = Camera(RocketTransform("camera"), AnimatedDouble.byValue(45.0), 0.1, 1000.0, FramebufferManager.getOrCreateFramebuffer("main", this.windowWidth, this.windowHeight, true, true)) {
             glClearColor(1.0f, 0.5f, 0.8f, 0.0f)
         }
-
-        this.fullScreenQuad = TexturedModel(
-            Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture)
-                .position(1.0, 1.0, 0.0).color(1.0, 1.0, 1.0).tex(1.0, 1.0).next()
-                .position(1.0, -1.0, 0.0).color(1.0, 1.0, 1.0).tex(1.0, 0.0).next()
-                .position(-1.0, -1.0, 0.0).color(1.0, 1.0, 1.0).tex(0.0, 0.0).next()
-                .position(-1.0, 1.0, 0.0).color(1.0, 1.0, 1.0).tex(0.0, 1.0).next(),
-            intArrayOf(
-                0, 1, 3,
-                1, 2, 3
-            ),
-            ShaderManager.getOrCreateShaderProgram("blit"),
-            this.camera.framebuffer.colourAsTexture
-        ).also { it.setup() }
 
         this.renderables.add(
             WorldObject(
@@ -159,6 +140,8 @@ object Hyperdrive {
         this.rocket.update()
         val time = Time(this.rocket.currentTime, this.rocket.currentRow)
         this.camera.render(time)
+        ShaderManager.getOrCreateShaderProgram("sobel").setUniform("InSize", this.camera.framebuffer.width.toFloat(), this.camera.framebuffer.height.toFloat())
+        applyPostShaderEffect(this.camera.framebuffer.width, this.camera.framebuffer.height, ShaderManager.getOrCreateShaderProgram("sobel"))
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glClearColor(1f, 1f, 1f, 1f)

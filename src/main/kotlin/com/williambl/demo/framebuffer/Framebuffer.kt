@@ -5,9 +5,7 @@ import com.williambl.demo.model.TexturedModel
 import com.williambl.demo.model.Vertices
 import com.williambl.demo.model.Vertices.Attribute.Color.color
 import com.williambl.demo.model.Vertices.Attribute.Position.position
-import com.williambl.demo.model.Vertices.Attribute.Position2d.position2d
 import com.williambl.demo.model.Vertices.Attribute.Texture.tex
-import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
 import com.williambl.demo.util.Mat4x4
