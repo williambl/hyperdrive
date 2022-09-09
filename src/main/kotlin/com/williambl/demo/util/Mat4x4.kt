@@ -66,7 +66,7 @@ class Mat4x4() {
     }
 
     @Contract(pure = true)
-    private operator fun set(row: Int, column: Int, value: Double) {
+    operator fun set(row: Int, column: Int, value: Double) {
         when(row) {
             0 -> this.row1
             1 -> this.row2

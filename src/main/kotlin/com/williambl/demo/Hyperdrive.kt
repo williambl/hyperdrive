@@ -6,6 +6,7 @@ import com.williambl.demo.framebuffer.FramebufferManager
 import com.williambl.demo.model.TexturedModel
 import com.williambl.demo.model.Vertices
 import com.williambl.demo.model.Vertices.Attribute.Color.color
+import com.williambl.demo.model.Vertices.Attribute.Normal.normal
 import com.williambl.demo.model.Vertices.Attribute.Position.position
 import com.williambl.demo.model.Vertices.Attribute.Texture.tex
 import com.williambl.demo.rocket4j.Rocket4J
@@ -45,15 +46,49 @@ object Hyperdrive {
             WorldObject(
                 RocketTransform("will"),
                 TexturedModel(
-                    Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture)
-                        .position(0.5, 0.5, 0.0).color(1.0, 0.0, 0.0).tex(1.0, 0.0).next()
-                        .position(0.5, -0.5, 0.0).color(0.0, 1.0, 0.0).tex(1.0, 1.0).next()
-                        .position(-0.5, -0.5, 0.0).color(0.0, 0.0, 1.0).tex(0.0, 1.0).next()
-                        .position(-0.5, 0.5, 0.0).color(1.0, 1.0, 0.0).tex(0.0, 0.0).next(),
-                    intArrayOf(
-                        0, 1, 3,
-                        1, 2, 3
-                    ),
+                    Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture, Vertices.Attribute.Normal)
+                    .position(-0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f,  0.0f, -1.0f).next()
+                    .position(0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(0.0f,  0.0f, -1.0f).next()
+                    .position(0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(0.0f,  0.0f, -1.0f).next()
+                    .position(0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(0.0f,  0.0f, -1.0f).next()
+                    .position(-0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f,  0.0f, -1.0f).next()
+                    .position(-0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f,  0.0f, -1.0f).next()
+
+                    .position(-0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f,  0.0f, 1.0f).next()
+                    .position(0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(0.0f,  0.0f, 1.0f).next()
+                    .position(0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(0.0f,  0.0f, 1.0f).next()
+                    .position(0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(0.0f,  0.0f, 1.0f).next()
+                    .position(-0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f,  0.0f, 1.0f).next()
+                    .position(-0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f,  0.0f, 1.0f).next()
+
+                    .position(-0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(-1.0f,  0.0f,  0.0f).next()
+                    .position(-0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(-1.0f,  0.0f,  0.0f).next()
+                    .position(-0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(-1.0f,  0.0f,  0.0f).next()
+                    .position(-0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(-1.0f,  0.0f,  0.0f).next()
+                    .position(-0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(-1.0f,  0.0f,  0.0f).next()
+                    .position(-0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(-1.0f,  0.0f,  0.0f).next()
+
+                    .position(0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(1.0f,  0.0f,  0.0f).next()
+                    .position(0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(1.0f,  0.0f,  0.0f).next()
+                    .position(0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(1.0f,  0.0f,  0.0f).next()
+                    .position(0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(1.0f,  0.0f,  0.0f).next()
+                    .position(0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(1.0f,  0.0f,  0.0f).next()
+                    .position(0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(1.0f,  0.0f,  0.0f).next()
+
+                    .position(-0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f, -1.0f,  0.0f).next()
+                    .position(0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(0.0f, -1.0f,  0.0f).next()
+                    .position(0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(0.0f, -1.0f,  0.0f).next()
+                    .position(0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(0.0f, -1.0f,  0.0f).next()
+                    .position(-0.5f, -0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f, -1.0f,  0.0f).next()
+                    .position(-0.5f, -0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f, -1.0f,  0.0f).next()
+
+                    .position(-0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f,  1.0f,  0.0f).next()
+                    .position(0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 1.0f).normal(0.0f,  1.0f,  0.0f).next()
+                    .position(0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(0.0f,  1.0f,  0.0f).next()
+                    .position(0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(1.0f, 0.0f).normal(0.0f,  1.0f,  0.0f).next()
+                    .position(-0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f,  1.0f,  0.0f).next()
+                    .position(-0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f,  1.0f,  0.0f).next(),
+                    (0 until 36).toList().toIntArray(),
                     ShaderManager.getOrCreateShaderProgram("flatTextured"),
                     TextureManager.getOrCreateTexture("/will.png")
                 )
@@ -141,7 +176,7 @@ object Hyperdrive {
         val time = Time(this.rocket.currentTime, this.rocket.currentRow)
         this.camera.render(time)
         ShaderManager.getOrCreateShaderProgram("sobel").setUniform("InSize", this.camera.framebuffer.width.toFloat(), this.camera.framebuffer.height.toFloat())
-        applyPostShaderEffect(this.camera.framebuffer.width, this.camera.framebuffer.height, ShaderManager.getOrCreateShaderProgram("sobel"))
+        //applyPostShaderEffect(this.camera.framebuffer.width, this.camera.framebuffer.height, ShaderManager.getOrCreateShaderProgram("sobel"))
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glClearColor(1f, 1f, 1f, 1f)

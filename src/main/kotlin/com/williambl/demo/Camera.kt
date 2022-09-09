@@ -16,7 +16,7 @@ class Camera(val transform: Transform, val fov: AnimatedDouble, val nearPlane: D
         get() = this.framebuffer.width.toDouble()/this.framebuffer.height.toDouble()
 
     fun render(time: Time) {
-        val renderContext = RenderingContext(MatrixStack(), this.viewMatrix(time), this.projectionMatrix(time), time)
+        val renderContext = RenderingContext(MatrixStack(), this.viewMatrix(time), this.projectionMatrix(time), this.transform.translation(time), time)
         ShaderManager.setGlobalUniforms(renderContext)
         this.framebuffer.bind()
         this.beforeRender()

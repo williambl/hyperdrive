@@ -37,6 +37,7 @@ object ShaderManager {
         this.shaders.values.forEach {
             it.setUniform("view", context.view)
             it.setUniform("projection", context.projection)
+            it.setUniform("CameraPos", context.cameraPos)
         }
     }
 

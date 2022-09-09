@@ -11,6 +11,7 @@ import com.williambl.demo.texture.Texture
 import com.williambl.demo.util.Mat4x4
 import com.williambl.demo.util.MatrixStack
 import com.williambl.demo.util.Time
+import com.williambl.demo.util.Vec3
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil.NULL
 
@@ -57,7 +58,7 @@ class Framebuffer(
     fun renderToCurrentBuffer(width: Int, height: Int, shader: ShaderProgram) {
         glDepthMask(false)
         glDisable(GL_DEPTH_TEST)
-        this.fullScreenQuadForDrawing(width, height, shader).render(RenderingContext(MatrixStack(), Mat4x4(), Mat4x4(), Time(0.0, 0.0)))
+        this.fullScreenQuadForDrawing(width, height, shader).render(RenderingContext(MatrixStack(), Mat4x4(), Mat4x4(), Vec3(0.0, 0.0, 0.0), Time(0.0, 0.0)))
         glEnable(GL_DEPTH_TEST)
         glDepthMask(true)
     }
