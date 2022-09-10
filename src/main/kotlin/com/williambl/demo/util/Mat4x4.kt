@@ -65,8 +65,7 @@ class Mat4x4() {
         }[column]
     }
 
-    @Contract(pure = true)
-    operator fun set(row: Int, column: Int, value: Double) {
+    private operator fun set(row: Int, column: Int, value: Double) {
         when(row) {
             0 -> this.row1
             1 -> this.row2
@@ -74,6 +73,71 @@ class Mat4x4() {
             3 -> this.row4
             else -> throw IllegalArgumentException("Row index $row is too high")
         }[column] = value
+    }
+
+    /**
+     * Calculates the inverse of this matrix.
+     *
+     * https://stackoverflow.com/a/44446912/5507477
+     *
+     * @return the inverse
+     */
+    @Contract(pure = true)
+    fun inverse(): Mat4x4 {
+        val a2323 = this[2, 2] * this[3, 3] - this[2, 3] * this[3, 2]
+        val a1323 = this[2, 1] * this[3, 3] - this[2, 3] * this[3, 1]
+        val a1223 = this[2, 1] * this[3, 2] - this[2, 2] * this[3, 1]
+        val a0323 = this[2, 0] * this[3, 3] - this[2, 3] * this[3, 0]
+        val a0223 = this[2, 0] * this[3, 2] - this[2, 2] * this[3, 0]
+        val a0123 = this[2, 0] * this[3, 1] - this[2, 1] * this[3, 0]
+        val a2313 = this[1, 2] * this[3, 3] - this[1, 3] * this[3, 2]
+        val a1313 = this[1, 1] * this[3, 3] - this[1, 3] * this[3, 1]
+        val a1213 = this[1, 1] * this[3, 2] - this[1, 2] * this[3, 1]
+        val a2312 = this[1, 2] * this[2, 3] - this[1, 3] * this[2, 2]
+        val a1312 = this[1, 1] * this[2, 3] - this[1, 3] * this[2, 1]
+        val a1212 = this[1, 1] * this[2, 2] - this[1, 2] * this[2, 1]
+        val a0313 = this[1, 0] * this[3, 3] - this[1, 3] * this[3, 0]
+        val a0213 = this[1, 0] * this[3, 2] - this[1, 2] * this[3, 0]
+        val a0312 = this[1, 0] * this[2, 3] - this[1, 3] * this[2, 0]
+        val a0212 = this[1, 0] * this[2, 2] - this[1, 2] * this[2, 0]
+        val a0113 = this[1, 0] * this[3, 1] - this[1, 1] * this[3, 0]
+        val a0112 = this[1, 0] * this[2, 1] - this[1, 1] * this[2, 0]
+
+        val det = 1.0 / (
+                          this[0, 0] * ( this[1, 1] * a2323 - this[1, 2] * a1323 + this[1, 3] * a1223 )
+                        - this[0, 1] * ( this[1, 0] * a2323 - this[1, 2] * a0323 + this[1, 3] * a0223 )
+                        + this[0, 2] * ( this[1, 0] * a1323 - this[1, 1] * a0323 + this[1, 3] * a0123 )
+                        - this[0, 3] * ( this[1, 0] * a1223 - this[1, 1] * a0223 + this[1, 2] * a0123 )
+                )
+
+        return Mat4x4().also {
+            it[0, 0] = det *   ( this[1, 1] * a2323 - this[1, 2] * a1323 + this[1, 3] * a1223 )
+            it[0, 1] = det * - ( this[0, 1] * a2323 - this[0, 2] * a1323 + this[0, 3] * a1223 )
+            it[0, 2] = det *   ( this[0, 1] * a2313 - this[0, 2] * a1313 + this[0, 3] * a1213 )
+            it[0, 3] = det * - ( this[0, 1] * a2312 - this[0, 2] * a1312 + this[0, 3] * a1212 )
+            it[1, 0] = det * - ( this[1, 0] * a2323 - this[1, 2] * a0323 + this[1, 3] * a0223 )
+            it[1, 1] = det *   ( this[0, 0] * a2323 - this[0, 2] * a0323 + this[0, 3] * a0223 )
+            it[1, 2] = det * - ( this[0, 0] * a2313 - this[0, 2] * a0313 + this[0, 3] * a0213 )
+            it[1, 3] = det *   ( this[0, 0] * a2312 - this[0, 2] * a0312 + this[0, 3] * a0212 )
+            it[2, 0] = det *   ( this[1, 0] * a1323 - this[1, 1] * a0323 + this[1, 3] * a0123 )
+            it[2, 1] = det * - ( this[0, 0] * a1323 - this[0, 1] * a0323 + this[0, 3] * a0123 )
+            it[2, 2] = det *   ( this[0, 0] * a1313 - this[0, 1] * a0313 + this[0, 3] * a0113 )
+            it[2, 3] = det * - ( this[0, 0] * a1312 - this[0, 1] * a0312 + this[0, 3] * a0112 )
+            it[3, 0] = det * - ( this[1, 0] * a1223 - this[1, 1] * a0223 + this[1, 2] * a0123 )
+            it[3, 1] = det *   ( this[0, 0] * a1223 - this[0, 1] * a0223 + this[0, 2] * a0123 )
+            it[3, 2] = det * - ( this[0, 0] * a1213 - this[0, 1] * a0213 + this[0, 2] * a0113 )
+            it[3, 3] = det *   ( this[0, 0] * a1212 - this[0, 1] * a0212 + this[0, 2] * a0112 )
+        }
+    }
+
+    @Contract(pure = true)
+    fun transpose(): Mat4x4 {
+        return Mat4x4(
+            this[0, 0], this[1, 0], this[2, 0], this[3, 0],
+            this[0, 1], this[1, 1], this[2, 1], this[3, 1],
+            this[0, 2], this[1, 2], this[2, 2], this[3, 2],
+            this[0, 3], this[1, 3], this[2, 3], this[3, 3]
+        )
     }
 
     fun forGl(): FloatArray {
