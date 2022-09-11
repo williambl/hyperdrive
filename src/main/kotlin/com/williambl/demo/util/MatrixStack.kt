@@ -7,6 +7,10 @@ class MatrixStack {
         return this.stack.reduce(Mat4x4::times)
     }
 
+    fun normal(view: Mat4x4): Mat3x3 {
+        return (view * this.value()).inverse().transpose().topLeft3x3()
+    }
+
     fun push(mat: Mat4x4): MatrixStack {
         this.stack.add(mat)
         return this

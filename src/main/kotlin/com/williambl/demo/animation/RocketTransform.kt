@@ -9,7 +9,7 @@ class RocketTransform(val name: String): Transform {
         return Hyperdrive.rocket.getVec3Track(this.name + "_trans").getValue(time.rocketRows)
     }
 
-    override fun rotation(time: Time): Rotation {
+    override fun rotation(time: Time): Quaternion {
         return Hyperdrive.rocket.getRotationTrack(this.name + "_rot").getValue(time.rocketRows)
     }
 

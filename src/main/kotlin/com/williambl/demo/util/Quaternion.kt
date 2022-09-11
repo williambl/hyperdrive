@@ -1,6 +1,11 @@
 package com.williambl.demo.util
 
-open class Quaternion(open val r: Double = 0.0, open val i: Double = 0.0, open val j: Double = 0.0, open val k: Double = 0.0) {
+import kotlin.math.*
+
+class Quaternion(val r: Double = 1.0, val i: Double = 0.0, val j: Double = 0.0, val k: Double = 0.0) {
+    val axis: Vec3 by lazy { Vec3(this.i, this.j, this.k).normalised() }
+    val theta: Double by lazy { 2 * atan2(sqrt(this.i * this.i + this.j * this.j + this.k * this.k), this.r) }
+
     operator fun times(other: Quaternion): Quaternion {
         val thisIjk = Vec3(this.i, this.j, this.k)
         val otherIjk = Vec3(other.i, other.j, other.k)
@@ -21,7 +26,31 @@ open class Quaternion(open val r: Double = 0.0, open val i: Double = 0.0, open v
         return Quaternion(this.r / factor, this.i / factor, this.j / factor, this.k / factor)
     }
 
-    fun toRotation(): Rotation {
-        return if (this is Rotation) this else Rotation.create(this.r, this.i, this.j, this.k)
+    fun flip(): Quaternion {
+        return create(this.axis * -1.0, this.theta)
+    }
+
+    companion object {
+        fun slerp(a: Quaternion, b: Quaternion, fac: Double): Quaternion {
+            val cosTheta = a.r * b.r + a.i * b.i + a.j * b.j + a.k * b.k // oh neat, it's the dot product
+            val theta = acos(cosTheta)
+            val sinTheta = sin(theta)
+
+            if (abs(sinTheta) < 0.001) {
+                return Quaternion(
+                    a.r * 0.5 + b.r * 0.5,
+                    a.i * 0.5 + b.i * 0.5,
+                    a.j * 0.5 + b.j * 0.5,
+                    a.k * 0.5 + b.k * 0.5
+                )
+            }
+
+            return ((a * sin((1-fac)*theta) + b * sin(fac*theta)) / sin(theta))
+        }
+
+        fun create(axis: Vec3, theta: Double): Quaternion {
+            val scaledAxis = axis * sin(theta/2.0)
+            return Quaternion(cos(theta/2.0), scaledAxis.x, scaledAxis.y, scaledAxis.z)
+        }
     }
 }

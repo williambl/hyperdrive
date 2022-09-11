@@ -161,6 +161,14 @@ class Mat4x4() {
         )
     }
 
+    fun topLeft3x3(): Mat3x3 {
+        return Mat3x3(
+            this[0, 0], this[0, 1], this[2, 2],
+            this[1, 0], this[1, 1], this[1, 2],
+            this[2, 0], this[2, 1], this[2, 2]
+        )
+    }
+
     companion object {
         fun scale(amount: Vec3): Mat4x4 {
             return Mat4x4(
@@ -192,7 +200,15 @@ class Mat4x4() {
             )
         }
 
-        fun rotate(rotation: Rotation): Mat4x4 = this.rotate(rotation.axis, rotation.theta)
+        // https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
+        fun rotate(quat: Quaternion): Mat4x4 {
+            return Mat4x4(
+                1.0 - 2.0 * quat.j * quat.j - 2.0 * quat.k * quat.k,    2.0 * quat.i * quat.j - 2.0 * quat.k * quat.r,      2.0 * quat.i * quat.k + 2.0 * quat.j * quat.r,          0.0,
+                2.0 * quat.i * quat.j + 2.0 * quat.k * quat.k,          1.0 - 2.0 * quat.i * quat.i - 2 * quat.k * quat.k,  2.0 * quat.j * quat.k - 2.0 * quat.i * quat.r,          0.0,
+                2.0 * quat.i * quat.k - 2.0 * quat.j * quat.r,          2.0 * quat.j * quat.k + 2.0 * quat.i * quat.r,      1.0 - 2.0 * quat.i * quat.i - 2.0 * quat.j * quat.j,    0.0,
+                0.0,                                                    0.0,                                                0.0,                                                    1.0
+            )
+        }
 
         // https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix
         fun perspective(fov: Double, aspectRatio: Double, nearPlane: Double, farPlane: Double): Mat4x4 {

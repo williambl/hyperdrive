@@ -1,5 +1,6 @@
 package com.williambl.demo.shader
 
+import com.williambl.demo.util.Mat3x3
 import com.williambl.demo.util.Mat4x4
 import com.williambl.demo.util.Vec3
 import org.lwjgl.opengl.GL20.*
@@ -23,6 +24,15 @@ class ShaderProgram(val name: String, val properties: ShaderProperties, private 
             glUniformMatrix4fv(loc, false, value.forGl())
         }
     }
+
+    fun setUniform(name: String, value: Mat3x3) {
+        this.use()
+        val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
+        if (loc != -1) {
+            glUniformMatrix3fv(loc, false, value.forGl())
+        }
+    }
+
 
     fun setUniform(name: String, value: Float) {
         this.use()

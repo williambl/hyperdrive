@@ -10,21 +10,21 @@ data class Vec3Track(private val trackX: Track, private val trackY: Track, priva
 }
 
 data class RotationTrack(private val trackX: Track, private val trackY: Track, private val trackZ: Track, private val trackTheta: Track) {
-    fun getValue(rows: Double): Rotation {
+    fun getValue(rows: Double): Quaternion {
         val keysX = this.trackX.getKeysForLerp(rows)
         val keysY = this.trackY.getKeysForLerp(rows)
         val keysZ = this.trackZ.getKeysForLerp(rows)
         val keysTheta = this.trackTheta.getKeysForLerp(rows)
 
         if (keysX.isEmpty() || keysY.isEmpty() || keysZ.isEmpty() || keysTheta.isEmpty()) {
-            return Rotation()
+            return Quaternion()
         }
 
-        val rotationA = Rotation(Vec3(keysX.getOrNull(0)?.value?.toDouble() ?: 0.0, keysY.getOrNull(0)?.value?.toDouble() ?: 0.0, keysZ.getOrNull(0)?.value?.toDouble() ?: 0.0), keysTheta.getOrNull(0)?.value?.toDouble() ?: 1.0)
-        val rotationB = Rotation(Vec3(keysX.getOrNull(1)?.value?.toDouble() ?: 0.0, keysY.getOrNull(1)?.value?.toDouble() ?: 0.0, keysZ.getOrNull(1)?.value?.toDouble() ?: 0.0), keysTheta.getOrNull(1)?.value?.toDouble() ?: 1.0)
+        val rotationA = Quaternion.create(Vec3(keysX.getOrNull(0)?.value?.toDouble() ?: 0.0, keysY.getOrNull(0)?.value?.toDouble() ?: 0.0, keysZ.getOrNull(0)?.value?.toDouble() ?: 0.0), keysTheta.getOrNull(0)?.value?.toDouble() ?: 1.0)
+        val rotationB = Quaternion.create(Vec3(keysX.getOrNull(1)?.value?.toDouble() ?: 0.0, keysY.getOrNull(1)?.value?.toDouble() ?: 0.0, keysZ.getOrNull(1)?.value?.toDouble() ?: 0.0), keysTheta.getOrNull(1)?.value?.toDouble() ?: 1.0)
         val fac = if (keysTheta.size == 2) keysTheta[0].keyType.apply((rows - keysTheta[0].row.toDouble()) / (keysTheta[1].row - keysTheta[0].row).toDouble()) else 0.0
 
-        return Rotation.slerp(rotationA, rotationB, fac)
+        return Quaternion.slerp(rotationA, rotationB, fac)
     }
 }
 
