@@ -6,9 +6,9 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 class Mat3x3() {
-    private val row1: Array<Double> = arrayOf(1.0, 0.0, 0.0, 0.0)
-    private val row2: Array<Double> = arrayOf(0.0, 1.0, 0.0, 0.0)
-    private val row3: Array<Double> = arrayOf(0.0, 0.0, 1.0, 0.0)
+    private val row1: Array<Double> = arrayOf(1.0, 0.0, 0.0)
+    private val row2: Array<Double> = arrayOf(0.0, 1.0, 0.0)
+    private val row3: Array<Double> = arrayOf(0.0, 0.0, 1.0)
 
     constructor(
         a0: Double, a1: Double, a2: Double,
