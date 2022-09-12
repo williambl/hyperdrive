@@ -2,6 +2,15 @@
 
 lorem ipsum etc.
 
+## Roadmap
+ - SSAO
+ - HDR
+ - Bloom
+ - Normal Mapping
+ - Importing Models
+ - Make a demo!
+ - Make the code a little nicer
+
 ## Standard Shader Uniforms
  - Model
  - View
