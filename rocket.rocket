@@ -1,0 +1,70 @@
+<sync rows="128">
+	<tracks>
+		<track name="camera_trans_x"/>
+		<track name="camera_trans_y">
+			<key interpolation="0" value="2" row="0"/>
+		</track>
+		<track name="camera_trans_z">
+			<key interpolation="0" value="5" row="0"/>
+		</track>
+		<track name="camera_rot_x">
+			<key interpolation="0" value="1" row="0"/>
+		</track>
+		<track name="camera_rot_y">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="camera_rot_z">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="camera_rot_�">
+			<key interpolation="0" value="0.30000001" row="0"/>
+		</track>
+		<track name="will_rot_x"/>
+		<track name="will_rot_y"/>
+		<track name="will_rot_z"/>
+		<track name="will_rot_�"/>
+		<track name="will_trans_x"/>
+		<track name="will_trans_y"/>
+		<track name="will_trans_z"/>
+		<track name="will_scale_x">
+			<key interpolation="0" value="1" row="0"/>
+		</track>
+		<track name="will_scale_y">
+			<key interpolation="0" value="1" row="0"/>
+		</track>
+		<track name="will_scale_z">
+			<key interpolation="0" value="1" row="0"/>
+		</track>
+		<track name="floor_rot_x">
+			<key interpolation="0" value="-1" row="0"/>
+		</track>
+		<track name="floor_rot_y">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="floor_rot_z">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="floor_rot_�">
+			<key interpolation="0" value="1.5700001" row="0"/>
+		</track>
+		<track name="floor_trans_x">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="floor_trans_y">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="floor_trans_z">
+			<key interpolation="0" value="-0.5" row="0"/>
+		</track>
+		<track name="floor_scale_x">
+			<key interpolation="0" value="5" row="0"/>
+		</track>
+		<track name="floor_scale_y">
+			<key interpolation="0" value="5" row="0"/>
+		</track>
+		<track name="floor_scale_z">
+			<key interpolation="0" value="5" row="0"/>
+		</track>
+	</tracks>
+	<bookmarks/>
+</sync>

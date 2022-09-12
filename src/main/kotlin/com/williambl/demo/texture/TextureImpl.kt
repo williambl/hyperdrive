@@ -15,7 +15,7 @@ import java.io.IOException
  * Do not call the constructor, use [TextureManager.getOrCreateTexture] instead.
  */
 class TextureImpl(val location: String) : Texture {
-    private val id: Int
+    val id: Int
     val width: Int
     val height: Int
 

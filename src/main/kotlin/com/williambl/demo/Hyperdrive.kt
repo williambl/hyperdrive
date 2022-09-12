@@ -12,6 +12,7 @@ import com.williambl.demo.model.Vertices.Attribute.Texture.tex
 import com.williambl.demo.rocket4j.Rocket4J
 import com.williambl.demo.rocket4j.TimeController
 import com.williambl.demo.shader.ShaderManager
+import com.williambl.demo.texture.TextureImpl
 import com.williambl.demo.texture.TextureManager
 import com.williambl.demo.util.Time
 import com.williambl.demo.util.applyPostShaderEffect
@@ -174,8 +175,11 @@ object Hyperdrive {
         this.rocket.update()
         val time = Time(this.rocket.currentTime, this.rocket.currentRow)
         this.camera.render(time)
-        ShaderManager.getOrCreateShaderProgram("sobel").setUniform("InSize", this.camera.framebuffer.width.toFloat(), this.camera.framebuffer.height.toFloat())
-        //applyPostShaderEffect(this.camera.framebuffer.width, this.camera.framebuffer.height, ShaderManager.getOrCreateShaderProgram("sobel"))
+        ShaderManager.getOrCreateShaderProgram("dither").setUniform("InSize", this.camera.framebuffer.width.toFloat(), this.camera.framebuffer.height.toFloat())
+        glActiveTexture(GL_TEXTURE1)
+        TextureManager.getOrCreateTexture("/dither.png").bind()
+        glActiveTexture(GL_TEXTURE0)
+        //applyPostShaderEffect(this.camera.framebuffer.width, this.camera.framebuffer.height, ShaderManager.getOrCreateShaderProgram("dither"))
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glClearColor(1f, 1f, 1f, 1f)

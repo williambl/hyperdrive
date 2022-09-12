@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.opengl.GL42
 
+//TODO work out a consistent naming scheme for uniforms
 /**
  * A representation of an OpenGL Shader Program (i.e. a fragment and vertex shader pair).
  *
@@ -33,6 +34,10 @@ class ShaderProgram(val name: String, val properties: ShaderProperties, private 
         }
     }
 
+    fun setUniform(name: String, value: Int) {
+        val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
+        glProgramUniform1i(this.id, loc, value)
+    }
 
     fun setUniform(name: String, value: Float) {
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
