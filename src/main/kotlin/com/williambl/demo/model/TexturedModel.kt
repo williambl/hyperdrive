@@ -9,22 +9,20 @@ import org.lwjgl.opengl.GL45.*
 
 open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, val shaderProgram: ShaderProgram, var texture: Texture):
     Renderable {
-    private val vbo: IntArray = intArrayOf(0)
-    private val vao: IntArray = intArrayOf(0)
-    private val ebo: IntArray = intArrayOf(0)
+    private val vbo: Int = glCreateBuffers() // vertex buffer object
+    private val vao: Int = glCreateVertexArrays() // vertex array object
+    private val ebo: Int = glCreateBuffers() // element (indices) buffer object
 
     var isSetup = false
 
     override fun setup() {
         if (this.isSetup) {
-            glBindVertexArray(this.vao[0])
-            glBindBuffer(GL_ARRAY_BUFFER, this.vbo[0])
             this.vertices.toBytes().let {
-                glBufferSubData(GL_ARRAY_BUFFER, 0, it)
+                glNamedBufferStorage(this.vbo, it, GL_DYNAMIC_STORAGE_BIT)
                 it.freeMemoryManaged()
             }
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.ebo[0])
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices)
+
+            glNamedBufferStorage(this.ebo, this.indices, GL_DYNAMIC_STORAGE_BIT)
             return
         }
 
@@ -32,25 +30,21 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
             throw RuntimeException("Trying to use a shader with different attributes to the vertices!\nShader Program: ${this.shaderProgram.properties.attributes.contentToString()}\nVertices: ${this.vertices.attributes.contentToString()}")
         }
 
-        glGenVertexArrays(this.vao)
-        glCreateBuffers(this.vbo)
-        glCreateBuffers(this.ebo)
-
-        glBindVertexArray(this.vao[0])
-
-        glBindBuffer(GL_ARRAY_BUFFER, this.vbo[0])
         this.vertices.toBytes().let {
-            glBufferData(GL_ARRAY_BUFFER, it, GL_STATIC_DRAW)
+            glNamedBufferStorage(this.vbo, it, GL_DYNAMIC_STORAGE_BIT)
             it.freeMemoryManaged()
         }
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.ebo[0])
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices, GL_STATIC_DRAW)
+        glNamedBufferStorage(this.ebo, this.indices, GL_DYNAMIC_STORAGE_BIT)
 
-        var offset: Long = 0
+        glVertexArrayVertexBuffer(this.vao, 0, this.vbo, 0, this.vertices.stride)
+        glVertexArrayElementBuffer(this.vao, this.ebo)
+
+        var offset = 0
         for ((index, attr) in this.vertices.attributes.withIndex()) {
-            glVertexAttribPointer(index, attr.count, attr.type, false, this.vertices.stride, offset)
-            glEnableVertexAttribArray(index)
+            glEnableVertexArrayAttrib(this.vao, index)
+            glVertexArrayAttribFormat(this.vao, index, attr.count, attr.type, false, offset)
+            glVertexArrayAttribBinding(this.vao, index, 0)
             offset += attr.size
         }
         this.isSetup = true
@@ -63,7 +57,7 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
             this.shaderProgram.setUniform("normalModelView", ctx.modelStack.normal(ctx.view))
         }
         this.texture.bind()
-        glBindVertexArray(this.vao[0])
+        glBindVertexArray(this.vao)
         glDrawElements(GL_TRIANGLES, this.indices.size, GL_UNSIGNED_INT, 0)
         glBindVertexArray(0)
     }
