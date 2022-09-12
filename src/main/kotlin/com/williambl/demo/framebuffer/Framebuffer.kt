@@ -12,6 +12,7 @@ import com.williambl.demo.util.Mat4x4
 import com.williambl.demo.util.MatrixStack
 import com.williambl.demo.util.Time
 import com.williambl.demo.util.Vec3
+import org.lwjgl.opengl.ARBDirectStateAccess.*
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil.NULL
 
@@ -72,7 +73,7 @@ class Framebuffer(
         this.height = height
         this.fullScreenQuad = null
         glBindTexture(GL_TEXTURE_2D, this.colourTexId)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL) // not using DSA here - glTextureStorage makes immutable textures.
         if (this.hasDepthAndStencil) {
             glBindTexture(GL_TEXTURE_2D, this.depthStencilTexId)
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, this.width, this.height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL)
@@ -83,15 +84,14 @@ class Framebuffer(
     private val colourTexId: Int
     private val depthStencilTexId: Int
     init {
-        this.id = glGenFramebuffers()
-        glBindFramebuffer(GL_FRAMEBUFFER, this.id)
+        this.id = glCreateFramebuffers()
 
         this.colourTexId = glGenTextures()
         glBindTexture(GL_TEXTURE_2D, this.colourTexId)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.colourTexId, 0)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL) // not using DSA here - glTextureStorage makes immutable textures.
+        glTextureParameteri(this.colourTexId, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTextureParameteri(this.colourTexId, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glNamedFramebufferTexture(this.id, GL_COLOR_ATTACHMENT0, this.colourTexId, 0)
 
         if (this.hasDepthAndStencil) {
             this.depthStencilTexId = glGenTextures()
@@ -107,9 +107,9 @@ class Framebuffer(
                 GL_UNSIGNED_INT_24_8,
                 NULL
             )
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, this.depthStencilTexId, 0)
+            glTextureParameteri(this.depthStencilTexId, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+            glTextureParameteri(this.depthStencilTexId, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+            glNamedFramebufferTexture(this.id, GL_DEPTH_STENCIL_ATTACHMENT, this.depthStencilTexId, 0)
         } else {
             this.depthStencilTexId = -1
         }

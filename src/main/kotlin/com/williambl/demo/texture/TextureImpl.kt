@@ -41,15 +41,15 @@ class TextureImpl(val location: String) : Texture {
         this.width = widthBuffer.first()
         this.height = heightBuffer.first()
 
-        this.id = glGenTextures()
+        this.id = glCreateTextures(GL_TEXTURE_2D)
 
-        glBindTexture(GL_TEXTURE_2D, this.id)
+        glTextureParameteri(this.id, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTextureParameteri(this.id, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture)
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1) // stbi
+        //TODO: work out why everything is rgba8
+        glTextureStorage2D(this.id, 1, GL_RGBA8, this.width, this.height)
+        glTextureSubImage2D(this.id, 0, 0, 0, this.width, this.height, GL_RGBA, GL_UNSIGNED_BYTE, texture)
     }
 
     override fun bind() {
