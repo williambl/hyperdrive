@@ -4,6 +4,8 @@ import com.williambl.demo.util.Mat3x3
 import com.williambl.demo.util.Mat4x4
 import com.williambl.demo.util.Vec3
 import org.lwjgl.opengl.GL20.*
+import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.GL42
 
 /**
  * A representation of an OpenGL Shader Program (i.e. a fragment and vertex shader pair).
@@ -18,41 +20,36 @@ class ShaderProgram(val name: String, val properties: ShaderProperties, private 
     }
 
     fun setUniform(name: String, value: Mat4x4) {
-        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
         if (loc != -1) {
-            glUniformMatrix4fv(loc, false, value.forGl())
+            glProgramUniformMatrix4fv(this.id, loc, false, value.forGl())
         }
     }
 
     fun setUniform(name: String, value: Mat3x3) {
-        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
         if (loc != -1) {
-            glUniformMatrix3fv(loc, false, value.forGl())
+            glProgramUniformMatrix3fv(this.id, loc, false, value.forGl())
         }
     }
 
 
     fun setUniform(name: String, value: Float) {
-        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
-        glUniform1f(loc, value)
+        glProgramUniform1f(this.id, loc, value)
     }
 
     fun setUniform(name: String, x: Float, y: Float) {
-        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
         if (loc != -1) {
-            glUniform2f(loc, x, y)
+            glProgramUniform2f(this.id, loc, x, y)
         }
     }
 
     fun setUniform(name: String, value: Vec3) {
-        this.use()
         val loc = this.uniforms.computeIfAbsent(name) { glGetUniformLocation(this.id, name) }
         if (loc != -1) {
-            glUniform3f(loc, value.x.toFloat(), value.y.toFloat(), value.z.toFloat())
+            glProgramUniform3f(this.id, loc, value.x.toFloat(), value.y.toFloat(), value.z.toFloat())
         }
     }
 }
