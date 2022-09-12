@@ -1,5 +1,5 @@
 attributes:
-position
+inPos
 inColor
 inTexCoord
-normal
+inNormal

@@ -35,8 +35,8 @@ object ShaderManager {
 
     fun setGlobalUniforms(context: RenderingContext) {
         this.shaders.values.forEach {
-            it.setUniform("view", context.view)
-            it.setUniform("projection", context.projection)
+            it.setUniform("View", context.view)
+            it.setUniform("Projection", context.projection)
             it.setUniform("CameraPos", context.cameraPos)
         }
     }

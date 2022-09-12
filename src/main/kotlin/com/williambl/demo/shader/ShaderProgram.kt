@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.opengl.GL42
 
-//TODO work out a consistent naming scheme for uniforms
 /**
  * A representation of an OpenGL Shader Program (i.e. a fragment and vertex shader pair).
  *

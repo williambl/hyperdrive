@@ -58,7 +58,7 @@ class Vertices(vararg val attributes: Attribute<*>) {
             }
         }
 
-        object Position: Attribute<Float>(3, "position", Float::class) {
+        object Position: Attribute<Float>(3, "inPos", Float::class) {
             fun Vertices.position(x: Float, y: Float, z: Float): Vertices {
                 this[Position].add(x)
                 this[Position].add(y)
@@ -88,7 +88,7 @@ class Vertices(vararg val attributes: Attribute<*>) {
             fun Vertices.tex(u: Double, v: Double) = this.tex(u.toFloat(), v.toFloat())
         }
 
-        object Normal: Attribute<Float>(3, "normal", Float::class) {
+        object Normal: Attribute<Float>(3, "inNormal", Float::class) {
             fun Vertices.normal(x: Float, y: Float, z: Float): Vertices {
                 this[Normal].add(x)
                 this[Normal].add(y)

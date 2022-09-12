@@ -1,19 +1,19 @@
 #version 450
 
 out vec4 fragColor;
-in vec3 vertColor;
-in vec2 texCoord;
-in vec2 oneTexel;
+in vec3 vColor;
+in vec2 vTexCoord;
+in vec2 vTexelSize;
 
-uniform sampler2D theTexture;
+uniform sampler2D DiffuseTex;
 
 void main()
 {
-    vec4 center = texture(theTexture, texCoord);
-    vec4 left   = texture(theTexture, texCoord - vec2(oneTexel.x, 0.0));
-    vec4 right  = texture(theTexture, texCoord + vec2(oneTexel.x, 0.0));
-    vec4 up     = texture(theTexture, texCoord - vec2(0.0, oneTexel.y));
-    vec4 down   = texture(theTexture, texCoord + vec2(0.0, oneTexel.y));
+    vec4 center = texture(DiffuseTex, vTexCoord);
+    vec4 left   = texture(DiffuseTex, vTexCoord - vec2(vTexelSize.x, 0.0));
+    vec4 right  = texture(DiffuseTex, vTexCoord + vec2(vTexelSize.x, 0.0));
+    vec4 up     = texture(DiffuseTex, vTexCoord - vec2(0.0, vTexelSize.y));
+    vec4 down   = texture(DiffuseTex, vTexCoord + vec2(0.0, vTexelSize.y));
     vec4 leftDiff  = center - left;
     vec4 rightDiff = center - right;
     vec4 upDiff    = center - up;

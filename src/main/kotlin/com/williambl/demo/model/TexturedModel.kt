@@ -52,9 +52,9 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
 
     override fun render(ctx: RenderingContext) {
         this.shaderProgram.use()
-        this.shaderProgram.setUniform("model", ctx.modelStack.value())
+        this.shaderProgram.setUniform("Model", ctx.modelStack.value())
         if (this.vertices.attributes.contains(Vertices.Attribute.Normal)) {
-            this.shaderProgram.setUniform("normalModelView", ctx.modelStack.normal(ctx.view))
+            this.shaderProgram.setUniform("NormalModelView", ctx.modelStack.normal(ctx.view))
         }
         this.texture.bind()
         glBindVertexArray(this.vao)
