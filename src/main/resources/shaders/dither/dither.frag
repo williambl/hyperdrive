@@ -11,7 +11,7 @@ layout (binding = 1) uniform sampler2D DitherTex;
 uniform vec2 InSize;
 
 void main() {
-    vec2 reducedSize = InSize * (200.0 / InSize.x); // downsample (gets weird with horizontal res < 200)
+    vec2 reducedSize = InSize * 0.25;// * (200.0 / InSize.x); // downsample (gets weird with horizontal res < 200)
 
     vec2 steppedCoord = vec2(
         float(int(vTexCoord.x*reducedSize.x)) / reducedSize.x,
