@@ -171,7 +171,6 @@ object Hyperdrive {
         // invoked during this call.
         glfwPollEvents()
 
-
         this.rocket.update()
         val time = Time(this.rocket.currentTime, this.rocket.currentRow)
         this.camera.render(time)
