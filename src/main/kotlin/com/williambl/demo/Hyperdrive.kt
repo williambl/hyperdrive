@@ -15,6 +15,7 @@ import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.texture.TextureImpl
 import com.williambl.demo.texture.TextureManager
 import com.williambl.demo.util.Time
+import com.williambl.demo.util.Vec3
 import com.williambl.demo.util.applyPostShaderEffect
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -39,8 +40,8 @@ object Hyperdrive {
         this.initGlfw()
         this.initGl()
 
-        this.camera = Camera(RocketTransform("camera"), AnimatedDouble.byValue(45.0), 0.1, 1000.0, FramebufferManager.getOrCreateFramebuffer("main", this.windowWidth, this.windowHeight, true, true)) {
-            glClearColor(1.0f, 0.5f, 0.8f, 0.0f)
+        this.camera = Camera(RocketTransform("camera"), AnimatedDouble.byValue(45.0), 0.1, 1000.0, FramebufferManager.getOrCreateGBuffer("main", this.windowWidth, this.windowHeight, true)) {
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
         }
 
         this.renderables.add(
@@ -90,7 +91,8 @@ object Hyperdrive {
                         .position(-0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f,  1.0f,  0.0f).next()
                         .position(-0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f,  1.0f,  0.0f).next(),
                     (0 until 36).toList().toIntArray(),
-                    ShaderManager.getOrCreateShaderProgram("litTextured"),
+                    ShaderManager.getOrCreateShaderProgram("deferred"),
+                    TextureManager.getOrCreateTexture("/will.png"),
                     TextureManager.getOrCreateTexture("/will.png")
                 )
             ).also { it.setup() }
@@ -100,16 +102,17 @@ object Hyperdrive {
             WorldObject(
                 RocketTransform("floor"),
                 TexturedModel(
-                    Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture)
-                        .position(0.5, 0.5, 0.0).color(1.0, 0.0, 0.0).tex(1.0, 0.0).next()
-                        .position(0.5, -0.5, 0.0).color(0.0, 1.0, 0.0).tex(1.0, 1.0).next()
-                        .position(-0.5, -0.5, 0.0).color(0.0, 0.0, 1.0).tex(0.0, 1.0).next()
-                        .position(-0.5, 0.5, 0.0).color(1.0, 1.0, 0.0).tex(0.0, 0.0).next(),
+                    Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture, Vertices.Attribute.Normal)
+                        .position(0.5, 0.5, 0.0).color(1.0, 0.0, 0.0).tex(1.0, 0.0).normal(0.0f, 1.0f, 0.0f).next()
+                        .position(0.5, -0.5, 0.0).color(0.0, 1.0, 0.0).tex(1.0, 1.0).normal(0.0f, 1.0f, 0.0f).next()
+                        .position(-0.5, -0.5, 0.0).color(0.0, 0.0, 1.0).tex(0.0, 1.0).normal(0.0f, 1.0f, 0.0f).next()
+                        .position(-0.5, 0.5, 0.0).color(1.0, 1.0, 0.0).tex(0.0, 0.0).normal(0.0f, 1.0f, 0.0f).next(),
                     intArrayOf(
                         0, 1, 3,
                         1, 2, 3
                     ),
-                    ShaderManager.getOrCreateShaderProgram("flatTextured"),
+                    ShaderManager.getOrCreateShaderProgram("deferred"),
+                    TextureManager.getOrCreateTexture("/bottom-text.jpg"),
                     TextureManager.getOrCreateTexture("/bottom-text.jpg")
                 )
             ).also { it.setup() }
@@ -175,16 +178,23 @@ object Hyperdrive {
         this.rocket.update()
         val time = Time(this.rocket.currentTime, this.rocket.currentRow)
         this.camera.render(time)
-        ShaderManager.getOrCreateShaderProgram("dither").setUniform("InSize", this.camera.framebuffer.width.toFloat(), this.camera.framebuffer.height.toFloat())
-        glActiveTexture(GL_TEXTURE1)
-        TextureManager.getOrCreateTexture("/dither.png").bind()
-        glActiveTexture(GL_TEXTURE0)
-        //applyPostShaderEffect(this.camera.framebuffer.width, this.camera.framebuffer.height, ShaderManager.getOrCreateShaderProgram("dither"))
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glClearColor(1f, 1f, 1f, 1f)
         glClear(GL_COLOR_BUFFER_BIT)
-        this.camera.framebuffer.renderToCurrentBuffer(this.windowWidth, this.windowHeight, ShaderManager.getOrCreateShaderProgram("blit"))
+        ShaderManager.getOrCreateShaderProgram("mergeGBuffer").let { shader -> //TODO a better system for lights
+            shader.setUniform("Lights[0].Position", Vec3(-3.0, 3.0, 0.0))
+            shader.setUniform("Lights[0].Color", Vec3(0.7, 0.2, 0.0))
+            shader.setUniform("Lights[1].Position", Vec3(3.0, 3.0, 0.0))
+            shader.setUniform("Lights[1].Color", Vec3(0.0, 0.3, 0.9))
+        }
+        this.camera.framebuffer.renderToCurrentBuffer(this.windowWidth, this.windowHeight, ShaderManager.getOrCreateShaderProgram("mergeGBuffer"))
+
+        ShaderManager.getOrCreateShaderProgram("dither").setUniform("InSize", this.windowWidth.toFloat(), this.windowHeight.toFloat())
+        glActiveTexture(GL_TEXTURE1)
+        TextureManager.getOrCreateTexture("/dither.png").bind()
+        glActiveTexture(GL_TEXTURE0)
+        //applyPostShaderEffect(this.camera.framebuffer.width, this.camera.framebuffer.height, ShaderManager.getOrCreateShaderProgram("dither"))
 
         // Swap the color buffers
         glfwSwapBuffers(this.window)

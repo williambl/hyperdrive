@@ -13,7 +13,16 @@ object FramebufferManager {
         hasDepthAndStencil: Boolean,
         followsWindowSize: Boolean
     ): Framebuffer {
-        return this.framebuffers.getOrPut(name) { Framebuffer(name, width, height, hasDepthAndStencil, followsWindowSize) }
+        return this.framebuffers.getOrPut(name) { FramebufferImpl(name, width, height, hasDepthAndStencil, followsWindowSize) }
+    }
+
+    fun getOrCreateGBuffer(
+        name: String,
+        width: Int,
+        height: Int,
+        followsWindowSize: Boolean
+    ): GBuffer {
+        return this.framebuffers.getOrPut(name) { GBuffer(name, width, height, followsWindowSize) }.let { if (it is GBuffer) it else throw RuntimeException("$name is not a GBuffer!") }
     }
 
     fun updateFramebufferSizes(width: Int, height: Int) {

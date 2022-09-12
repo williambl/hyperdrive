@@ -2,6 +2,8 @@ package com.williambl.demo
 
 import com.williambl.demo.animation.AnimatedDouble
 import com.williambl.demo.framebuffer.Framebuffer
+import com.williambl.demo.framebuffer.FramebufferImpl
+import com.williambl.demo.framebuffer.GBuffer
 import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.transform.Transform
 import com.williambl.demo.util.Mat4x4
@@ -10,6 +12,7 @@ import com.williambl.demo.util.Time
 import com.williambl.demo.util.Vec4
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_SRGB
 
 class Camera(val transform: Transform, val fov: AnimatedDouble, val nearPlane: Double, val farPlane: Double, val framebuffer: Framebuffer, val beforeRender: () -> Unit = {}) {
     val aspectRatio: Double
@@ -21,7 +24,7 @@ class Camera(val transform: Transform, val fov: AnimatedDouble, val nearPlane: D
         this.framebuffer.bind()
         this.beforeRender()
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
-        if (this.framebuffer.hasDepthAndStencil) {
+        if (this.framebuffer.hasDepth) {
             glEnable(GL_DEPTH_TEST)
         }
         Hyperdrive.renderables.forEach { it.render(renderContext) }

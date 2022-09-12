@@ -7,7 +7,7 @@ import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
 import org.lwjgl.opengl.GL45.*
 
-open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, val shaderProgram: ShaderProgram, var texture: Texture):
+open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, val shaderProgram: ShaderProgram, vararg var textures: Texture):
     Renderable {
     private val vbo: Int = glCreateBuffers() // vertex buffer object
     private val vao: Int = glCreateVertexArrays() // vertex array object
@@ -56,7 +56,12 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
         if (this.vertices.attributes.contains(Vertices.Attribute.Normal)) {
             this.shaderProgram.setUniform("NormalModelView", ctx.modelStack.normal(ctx.view))
         }
-        this.texture.bind()
+
+        for ((index, texture) in this.textures.withIndex()) {
+            glActiveTexture(GL_TEXTURE0 + index)
+            texture.bind()
+        }
+
         glBindVertexArray(this.vao)
         glDrawElements(GL_TRIANGLES, this.indices.size, GL_UNSIGNED_INT, 0)
         glBindVertexArray(0)
