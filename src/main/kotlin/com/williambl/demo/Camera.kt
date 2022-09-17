@@ -10,7 +10,7 @@ import com.williambl.demo.util.Time
 import com.williambl.demo.util.Vec4
 import org.lwjgl.opengl.GL11.*
 
-class Camera(val transform: Transform, val fov: AnimatedDouble, val nearPlane: Double, val farPlane: Double, val framebuffer: Framebuffer, val beforeRender: () -> Unit = {}) {
+class Camera(val transform: Transform, val fov: AnimatedDouble, val nearPlane: Double, val farPlane: Double, val framebuffer: Framebuffer, val beforeRender: () -> Unit = { glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) }) {
     val aspectRatio: Double
         get() = this.framebuffer.width.toDouble()/this.framebuffer.height.toDouble()
 
@@ -19,7 +19,6 @@ class Camera(val transform: Transform, val fov: AnimatedDouble, val nearPlane: D
         ShaderManager.setGlobalUniforms(renderContext)
         this.framebuffer.bind()
         this.beforeRender()
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
         if (this.framebuffer.hasDepth) {
             glEnable(GL_DEPTH_TEST)
         }

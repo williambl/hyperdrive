@@ -40,10 +40,13 @@ object Hyperdrive {
 
         this.deferredCamera = Camera(RocketTransform("camera"), AnimatedDouble.byValue(45.0), 0.1, 1000.0, FramebufferManager.getOrCreateGBuffer("gBuffer", this.windowWidth, this.windowHeight, true)) {
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
+            glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
         }
 
         this.forwardCamera = Camera(RocketTransform("camera"), AnimatedDouble.byValue(45.0), 0.1, 1000.0, FramebufferManager.getOrCreateFramebuffer("forward", this.windowWidth, this.windowHeight, true, true)) {
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
+            glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+            glBlitNamedFramebuffer(this.deferredCamera.framebuffer.id, this.forwardCamera.framebuffer.id, 0, 0, this.windowWidth, this.windowHeight, 0, 0, this.forwardCamera.framebuffer.width, this.forwardCamera.framebuffer.height, GL_DEPTH_BUFFER_BIT, GL_NEAREST)
         }
 
         setupWorld()
@@ -120,7 +123,6 @@ object Hyperdrive {
         }
         this.deferredCamera.framebuffer.renderToCurrentBuffer(this.windowWidth, this.windowHeight, ShaderManager.getOrCreateShaderProgram("mergeGBuffer"))
 
-        glBlitNamedFramebuffer(this.deferredCamera.framebuffer.id, this.forwardCamera.framebuffer.id, 0, 0, this.windowWidth, this.windowHeight, 0, 0, this.forwardCamera.framebuffer.width, this.forwardCamera.framebuffer.height, GL_DEPTH_BUFFER_BIT, GL_NEAREST)
         this.forwardCamera.render(time, this.getRenderablesForPass("forward"))
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glEnable(GL_BLEND)
