@@ -1,5 +1,6 @@
 package com.williambl.demo.shader
 
+import com.williambl.demo.Hyperdrive
 import com.williambl.demo.RenderingContext
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL45
@@ -38,6 +39,7 @@ object ShaderManager {
             it.setUniform("View", context.view)
             it.setUniform("Projection", context.projection)
             it.setUniform("CameraPos", context.cameraPos)
+            it.setUniform("InSize", Hyperdrive.windowWidth.toFloat(), Hyperdrive.windowHeight.toFloat()) //TODO make this nicer
         }
     }
 
