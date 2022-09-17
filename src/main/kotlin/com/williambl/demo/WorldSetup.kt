@@ -8,10 +8,12 @@ import com.williambl.demo.model.Vertices.Attribute.Color.color
 import com.williambl.demo.model.Vertices.Attribute.Normal.normal
 import com.williambl.demo.model.Vertices.Attribute.Position.position
 import com.williambl.demo.model.Vertices.Attribute.Texture.tex
+import com.williambl.demo.model.loadModel
 import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.texture.TextureManager
 import com.williambl.demo.util.Quaternion
 import com.williambl.demo.util.Vec3
+import kotlin.io.path.Path
 
 fun setupWorld() {
     Hyperdrive.addRenderable("deferred",
@@ -193,4 +195,6 @@ fun setupWorld() {
             )
         ).also { it.setup() }
     )
+
+    Hyperdrive.addRenderable("forward", loadModel(Path("/home/william/dev/hyperdrive_demo/teapot.obj"), ShaderManager.getOrCreateShaderProgram("litTextured")).also { it.setup() })
 }
