@@ -2,7 +2,7 @@ package com.williambl.demo
 
 import com.williambl.demo.transform.Transform
 
-open class WorldObject(val transform: Transform, vararg val children: Renderable): Renderable {
+open class WorldObject(var transform: Transform, vararg var children: Renderable): Renderable {
     override fun setup() {
         this.children.forEach(Renderable::setup)
     }
