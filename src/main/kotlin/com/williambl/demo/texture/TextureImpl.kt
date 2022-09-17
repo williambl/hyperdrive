@@ -6,24 +6,25 @@ import com.williambl.demo.toMemoryManaged
 import org.lwjgl.opengl.GL45.*
 import org.lwjgl.stb.STBImage
 import java.io.IOException
+import java.io.InputStream
 
 /**
  * A representation of a texture.
  *
- * The texture is loaded from the jar resource at [location], from any format supported by [STBImage].
+ * The texture is loaded from the jar resource at [name], from any format supported by [STBImage].
  *
  * Do not call the constructor, use [TextureManager.getOrCreateTexture] instead.
  */
-class TextureImpl(val location: String) : Texture {
+class TextureImpl(val name: String, stream: InputStream?) : Texture {
     val id: Int
     val width: Int
     val height: Int
 
     init {
         val imageData = try {
-            this::class.java.getResourceAsStream(this.location)?.toByteBuffer()?.toMemoryManaged() ?: throw IOException("Null Resource")
+            stream?.toByteBuffer()?.toMemoryManaged() ?: throw IOException("Null Resource")
         } catch (e: IOException) {
-            throw RuntimeException("\"${this.location}\" is not a valid texture", e)
+            throw RuntimeException("\"${this.name}\" is not a valid texture", e)
         }
 
         val widthBuffer = IntArray(1)
@@ -35,7 +36,7 @@ class TextureImpl(val location: String) : Texture {
         imageData.freeMemoryManaged()
 
         if (texture == null) {
-            throw RuntimeException("\"${this.location}\" is not a valid texture: ${STBImage.stbi_failure_reason()}")
+            throw RuntimeException("\"${this.name}\" is not a valid texture: ${STBImage.stbi_failure_reason()}")
         }
 
         this.width = widthBuffer.first()
@@ -54,7 +55,7 @@ class TextureImpl(val location: String) : Texture {
 
     override fun bind() {
         if (this.id == -1) {
-            println("\"${this.location}\" is not a valid texture")
+            println("\"${this.name}\" is not a valid texture")
             return
         }
         glBindTexture(GL_TEXTURE_2D, this.id)

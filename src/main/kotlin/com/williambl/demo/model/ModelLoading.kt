@@ -89,7 +89,7 @@ private fun AIMaterial.textures(textureType: Int): Array<Texture> {
     return Array(aiGetMaterialTextureCount(this, textureType)) { i ->
         val path = AIString.create()
         aiGetMaterialTexture(this, textureType, i, path, null as IntArray?, null, null, null, null, null)
-        return@Array TextureManager.getOrCreateTexture(path.dataString())
+        return@Array TextureManager.getOrCreateTexture(Path.of(path.dataString()))
     }
 }
 
