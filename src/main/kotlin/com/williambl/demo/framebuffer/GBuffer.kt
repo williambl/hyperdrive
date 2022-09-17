@@ -8,6 +8,7 @@ import com.williambl.demo.model.Vertices.Attribute.Position.position
 import com.williambl.demo.model.Vertices.Attribute.Texture.tex
 import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
+import com.williambl.demo.texture.SimpleTexture
 import com.williambl.demo.util.Mat4x4
 import com.williambl.demo.util.MatrixStack
 import com.williambl.demo.util.Time
@@ -34,13 +35,9 @@ class GBuffer(
     private var fullScreenQuadTexWidth: Int = 0
     private var fullScreenQuadTexHeight: Int = 0
 
-    private class WrappedTexture(val id: Int) : Texture {
-        override fun bind() = glBindTexture(GL_TEXTURE_2D, id)
-    }
-
-    private val positionTex = WrappedTexture(this.positionTexId)
-    private val normalTex = WrappedTexture(this.normalTexId)
-    private val albedoSpecTex = WrappedTexture(this.albedoSpecTexId)
+    val positionTex: Texture = SimpleTexture(this.positionTexId)
+    val normalTex: Texture = SimpleTexture(this.normalTexId)
+    val albedoSpecTex: Texture = SimpleTexture(this.albedoSpecTexId)
 
     init {
         glBindTexture(GL_TEXTURE_2D, this.positionTexId)
