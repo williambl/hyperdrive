@@ -9,6 +9,7 @@ import com.williambl.demo.shader.ShaderManager
 import com.williambl.demo.texture.TextureManager
 import com.williambl.demo.util.Time
 import com.williambl.demo.util.Vec3
+import com.williambl.demo.util.applyPostShaderEffect
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL

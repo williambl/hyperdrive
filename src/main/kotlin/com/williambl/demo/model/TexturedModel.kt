@@ -7,7 +7,7 @@ import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
 import org.lwjgl.opengl.GL45.*
 
-open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, val shaderProgram: ShaderProgram, vararg var textures: Texture):
+open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, var shaderProgram: ShaderProgram, vararg var textures: Texture):
     Renderable {
     private val vbo: Int = glCreateBuffers() // vertex buffer object
     private val vao: Int = glCreateVertexArrays() // vertex array object

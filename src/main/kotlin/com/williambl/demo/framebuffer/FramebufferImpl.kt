@@ -8,10 +8,7 @@ import com.williambl.demo.model.Vertices.Attribute.Position.position
 import com.williambl.demo.model.Vertices.Attribute.Texture.tex
 import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
-import com.williambl.demo.util.Mat4x4
-import com.williambl.demo.util.MatrixStack
-import com.williambl.demo.util.Time
-import com.williambl.demo.util.Vec3
+import com.williambl.demo.util.*
 import org.lwjgl.opengl.GL45.*
 import org.lwjgl.system.MemoryUtil.*
 
@@ -77,19 +74,7 @@ class FramebufferImpl(
     }
 
     override fun renderToCurrentBuffer(width: Int, height: Int, shader: ShaderProgram) {
-        glDepthMask(false)
-        glDisable(GL_DEPTH_TEST)
-        this.fullScreenQuadForDrawing(width, height, shader).render(
-            RenderingContext(
-                MatrixStack(),
-                Mat4x4(),
-                Mat4x4(),
-                Vec3(0.0, 0.0, 0.0),
-                Time(0.0, 0.0)
-            )
-        )
-        glEnable(GL_DEPTH_TEST)
-        glDepthMask(true)
+        drawToCurrentBuffer(shader, this.colourAsTexture)
     }
 
     override fun bind() {
