@@ -3,12 +3,12 @@
 lorem ipsum etc.
 
 ## Roadmap
- - SSAO
  - HDR
  - Bloom
  - Normal Mapping
- - Importing Models
+ - Proper Materials system
  - Make a demo!
+ - SSAO
  - Make the code a little nicer
 
 ## Standard Shader Uniforms
