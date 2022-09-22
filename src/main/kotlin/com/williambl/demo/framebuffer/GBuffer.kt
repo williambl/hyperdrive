@@ -94,29 +94,4 @@ class GBuffer(
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, this.width, this.height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL)
     }
 
-    private fun fullScreenQuadForDrawing(width: Int, height: Int, shader: ShaderProgram): TexturedModel {
-        if (this.fullScreenQuadTexWidth == width && this.fullScreenQuadTexHeight == height && this.fullScreenQuad?.shaderProgram == shader) {
-            return this.fullScreenQuad as TexturedModel
-        } else {
-            this.fullScreenQuad = TexturedModel(
-                Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture)
-                    .position(1.0, 1.0, 0.0).color(1.0, 1.0, 1.0)
-                    .tex(width / this.width.toDouble(), height / this.height.toDouble()).next()
-                    .position(1.0, -1.0, 0.0).color(1.0, 1.0, 1.0).tex(width / this.width.toDouble(), 0.0).next()
-                    .position(-1.0, -1.0, 0.0).color(1.0, 1.0, 1.0).tex(0.0, 0.0).next()
-                    .position(-1.0, 1.0, 0.0).color(1.0, 1.0, 1.0).tex(0.0, height / this.height.toDouble()).next(),
-                intArrayOf(
-                    0, 1, 3,
-                    1, 2, 3
-                ),
-                shader,
-                this.positionTex,
-                this.normalTex,
-                this.albedoSpecTex
-            ).also { it.setup() }
-            this.fullScreenQuadTexWidth = width
-            this.fullScreenQuadTexHeight = height
-            return this.fullScreenQuad!!
-        }
-    }
 }

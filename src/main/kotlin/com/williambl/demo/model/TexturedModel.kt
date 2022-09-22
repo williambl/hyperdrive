@@ -3,11 +3,12 @@ package com.williambl.demo.model
 import com.williambl.demo.Renderable
 import com.williambl.demo.RenderingContext
 import com.williambl.demo.freeMemoryManaged
+import com.williambl.demo.material.Material
 import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
 import org.lwjgl.opengl.GL45.*
 
-open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, var shaderProgram: ShaderProgram, vararg var textures: Texture):
+open class TexturedModel(protected val vertices: Vertices, protected val indices: IntArray, var material: Material):
     Renderable {
     private val vbo: Int = glCreateBuffers() // vertex buffer object
     private val vao: Int = glCreateVertexArrays() // vertex array object
@@ -26,8 +27,8 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
             return
         }
 
-        if (!this.shaderProgram.properties.attributes.contentEquals(this.vertices.attributes)) {
-            throw RuntimeException("Trying to use a shader with different attributes to the vertices!\nShader Program: ${this.shaderProgram.properties.attributes.contentToString()}\nVertices: ${this.vertices.attributes.contentToString()}")
+        if (!this.material.shader.properties.attributes.contentEquals(this.vertices.attributes)) {
+            throw RuntimeException("Trying to use a shader with different attributes to the vertices!\nShader Program: ${this.material.shader.properties.attributes.contentToString()}\nVertices: ${this.vertices.attributes.contentToString()}")
         }
 
         this.vertices.toBytes().let {
@@ -51,13 +52,13 @@ open class TexturedModel(protected val vertices: Vertices, protected val indices
     }
 
     override fun render(ctx: RenderingContext) {
-        this.shaderProgram.use()
-        this.shaderProgram.setUniform("Model", ctx.modelStack.value())
+        this.material.shader.use()
+        this.material.shader.setUniform("Model", ctx.modelStack.value())
         if (this.vertices.attributes.contains(Vertices.Attribute.Normal)) {
-            this.shaderProgram.setUniform("NormalModelView", ctx.modelStack.normal(ctx.view))
+            this.material.shader.setUniform("NormalModelView", ctx.modelStack.normal(ctx.view))
         }
 
-        for ((index, texture) in this.textures.withIndex()) {
+        for ((index, texture) in this.material.textures.withIndex()) {
             glActiveTexture(GL_TEXTURE0 + index)
             texture.bind()
         }

@@ -9,6 +9,7 @@ import com.williambl.demo.model.Vertices.Attribute.Texture.tex
 import com.williambl.demo.shader.ShaderProgram
 import com.williambl.demo.texture.Texture
 import com.williambl.demo.texture.TextureManager
+import com.williambl.demo.texture.TextureSlot
 import com.williambl.demo.util.Quaternion
 import com.williambl.demo.util.Vec3
 import org.lwjgl.PointerBuffer
@@ -77,12 +78,16 @@ fun toModel(aiMesh: AIMesh, materials: List<AIMaterial>, shader: ShaderProgram):
 
     val material = materials[aiMesh.mMaterialIndex()]
 
-    //TODO: have a proper material class with texture slots
-    val diffuseTextures = material.textures(aiTextureType_DIFFUSE)
-    val normalTextures = material.textures(aiTextureType_NORMALS)
-    val specularTextures = material.textures(aiTextureType_SPECULAR)
-
-    return TexturedModel(vertices, indices, shader, *diffuseTextures, *normalTextures, *specularTextures)
+    return TexturedModel(vertices, indices, shader.createMaterial {
+        for (i in aiTextureType_NONE..aiTextureType_UNKNOWN) {
+            material.textures(i).forEachIndexed { texIndex, tex ->
+                texture(
+                    TextureSlot.namesForAssimpTypes[i] + if (texIndex == 0) { "" } else { "_${texIndex}"},
+                    tex
+                )
+            }
+        }
+    })
 }
 
 private fun AIMaterial.textures(textureType: Int): Array<Texture> {

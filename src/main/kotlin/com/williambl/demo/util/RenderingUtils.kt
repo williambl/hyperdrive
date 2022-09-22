@@ -4,6 +4,7 @@ import com.williambl.demo.Hyperdrive
 import com.williambl.demo.RenderingContext
 import com.williambl.demo.framebuffer.Framebuffer
 import com.williambl.demo.framebuffer.FramebufferManager
+import com.williambl.demo.material.Material
 import com.williambl.demo.model.TexturedModel
 import com.williambl.demo.model.Vertices
 import com.williambl.demo.model.Vertices.Attribute.Color.color
@@ -35,14 +36,13 @@ val fullScreenQuad = TexturedModel(
         0, 1, 3,
         1, 2, 3
     ),
-    ShaderManager.getOrCreateShaderProgram("blit")
+    ShaderManager.getOrCreateShaderProgram("blit").createMaterial { texture("DiffuseTex", null) }
 )
 
 fun drawToCurrentBuffer(shader: ShaderProgram, vararg textures: Texture) {
     glDepthMask(false)
     glDisable(GL_DEPTH_TEST)
-    fullScreenQuad.shaderProgram = shader
-    fullScreenQuad.textures = textures
+    fullScreenQuad.material = Material(shader, *textures)
     if (!fullScreenQuad.isSetup) {
         fullScreenQuad.setup()
     }

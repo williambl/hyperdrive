@@ -63,9 +63,10 @@ fun setupWorld() {
                     .position(-0.5f,  0.5f,  0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 0.0f).normal(0.0f,  1.0f,  0.0f).next()
                     .position(-0.5f,  0.5f, -0.5f).color(1.0, 1.0, 1.0).tex(0.0f, 1.0f).normal(0.0f,  1.0f,  0.0f).next(),
                 (0 until 36).toList().toIntArray(),
-                ShaderManager.getOrCreateShaderProgram("deferred"),
-                TextureManager.getOrCreateTexture("/will.png"),
-                TextureManager.getOrCreateTexture("/will.png")
+                ShaderManager.getOrCreateShaderProgram("deferred").createMaterial {
+                    texture("DiffuseTex", TextureManager.getOrCreateTexture("/will.png"))
+                    texture("SpecularTex", TextureManager.getOrCreateTexture("/will.png"))
+                }
             )
         ).also { it.setup() }
     )
@@ -83,9 +84,10 @@ fun setupWorld() {
                     0, 1, 3,
                     1, 2, 3
                 ),
-                ShaderManager.getOrCreateShaderProgram("deferred"),
-                TextureManager.getOrCreateTexture("/bottom-text.jpg"),
-                TextureManager.getOrCreateTexture("/bottom-text.jpg")
+                ShaderManager.getOrCreateShaderProgram("deferred").createMaterial {
+                    texture("DiffuseTex", TextureManager.getOrCreateTexture("/bottom-text.jpg"))
+                    texture("SpecularTex", TextureManager.getOrCreateTexture("/bottom-text.jpg"))
+                }
             )
         ).also { it.setup() }
     )
@@ -137,8 +139,9 @@ fun setupWorld() {
                     .position(-0.5f,  0.5f,  0.5f).color(0.0, 0.5, 1.0).tex(0.0f, 0.0f).next()
                     .position(-0.5f,  0.5f, -0.5f).color(0.0, 0.5, 1.0).tex(0.0f, 1.0f).next(),
                 (0 until 36).toList().toIntArray(),
-                ShaderManager.getOrCreateShaderProgram("flatTextured"),
-                TextureManager.getOrCreateTexture("/dither.png")
+                ShaderManager.getOrCreateShaderProgram("flatTextured").createMaterial {
+                    texture("DiffuseTex", TextureManager.getOrCreateTexture("/dither.png"))
+                }
             )
         ).also { it.setup() }
     )
@@ -190,8 +193,9 @@ fun setupWorld() {
                     .position(-0.5f,  0.5f,  0.5f).color(1.0, 0.5, 0.0).tex(0.0f, 0.0f).next()
                     .position(-0.5f,  0.5f, -0.5f).color(1.0, 0.5, 0.0).tex(0.0f, 1.0f).next(),
                 (0 until 36).toList().toIntArray(),
-                ShaderManager.getOrCreateShaderProgram("flatTextured"),
-                TextureManager.getOrCreateTexture("/dither.png")
+                ShaderManager.getOrCreateShaderProgram("flatTextured").createMaterial {
+                    texture("DiffuseTex", TextureManager.getOrCreateTexture("/dither.png"))
+                }
             )
         ).also { it.setup() }
     )

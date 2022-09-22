@@ -98,27 +98,4 @@ class FramebufferImpl(
         }
     }
 
-    private fun fullScreenQuadForDrawing(width: Int, height: Int, shader: ShaderProgram): TexturedModel {
-        if (this.fullScreenQuadTexWidth == width && this.fullScreenQuadTexHeight == height && this.fullScreenQuad?.shaderProgram == shader) {
-            return this.fullScreenQuad as TexturedModel
-        } else {
-            this.fullScreenQuad = TexturedModel(
-                Vertices(Vertices.Attribute.Position, Vertices.Attribute.Color, Vertices.Attribute.Texture)
-                    .position(1.0, 1.0, 0.0).color(1.0, 1.0, 1.0)
-                    .tex(width / this.width.toDouble(), height / this.height.toDouble()).next()
-                    .position(1.0, -1.0, 0.0).color(1.0, 1.0, 1.0).tex(width / this.width.toDouble(), 0.0).next()
-                    .position(-1.0, -1.0, 0.0).color(1.0, 1.0, 1.0).tex(0.0, 0.0).next()
-                    .position(-1.0, 1.0, 0.0).color(1.0, 1.0, 1.0).tex(0.0, height / this.height.toDouble()).next(),
-                intArrayOf(
-                    0, 1, 3,
-                    1, 2, 3
-                ),
-                shader,
-                this.colourAsTexture
-            ).also { it.setup() }
-            this.fullScreenQuadTexWidth = width
-            this.fullScreenQuadTexHeight = height
-            return this.fullScreenQuad!!
-        }
-    }
 }

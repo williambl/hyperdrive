@@ -1,6 +1,7 @@
 package com.williambl.demo.shader
 
 import com.williambl.demo.freeMemoryManaged
+import com.williambl.demo.material.Material
 import com.williambl.demo.toStackManaged
 import com.williambl.demo.util.Mat3x3
 import com.williambl.demo.util.Mat4x4
@@ -37,6 +38,8 @@ class ShaderProgram(val name: String, val properties: ShaderProperties, private 
     fun use() {
         glUseProgram(this.id)
     }
+
+    fun createMaterial(builderConsumer: MaterialBuilder.() -> Unit): Material = MaterialBuilder(this).also(builderConsumer).build()
 
     fun getSamplers(): List<Uniform> = this.uniforms.values.filter { it.type in GL_SAMPLER_1D..GL_SAMPLER_2D_SHADOW } //TODO are there later sampler types we should check for here?
 
