@@ -200,5 +200,5 @@ fun setupWorld() {
         ).also { it.setup() }
     )
 
-    Hyperdrive.addRenderable("deferred", loadModel(Path("/home/william/dev/hyperdrive_demo/teapot.dae"), ShaderManager.getOrCreateShaderProgram("deferred")).also { it.setup(); it.transform = RocketTransform("teapot") })
+    Hyperdrive.addRenderable("deferred", loadModel(Path("/home/william/dev/hyperdrive_demo/teapot.dae"), ShaderManager.getOrCreateShaderProgram("liquid_container")).also { it.setup(); it.transform = RocketTransform("teapot") })
 }

@@ -2,6 +2,7 @@ package com.williambl.demo.shader
 
 import com.williambl.demo.Hyperdrive
 import com.williambl.demo.RenderingContext
+import com.williambl.demo.util.Vec3
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL45
 import java.io.FileNotFoundException
@@ -39,6 +40,9 @@ object ShaderManager {
             it.setUniform("View", context.view)
             it.setUniform("Projection", context.projection)
             it.setUniform("CameraPos", context.cameraPos)
+            it.setUniform("LiquidLevel", 1.0f)
+            it.setUniform("LiquidColor", Vec3(0.7, 0.3, 0.3))
+            it.setUniform("FoamColor", Vec3(0.7, 0.8, 0.8))
             it.setUniform("InSize", Hyperdrive.windowWidth.toFloat(), Hyperdrive.windowHeight.toFloat()) //TODO make this nicer
         }
     }

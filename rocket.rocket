@@ -24,7 +24,9 @@
 		<track name="will_rot_z"/>
 		<track name="will_rot_�"/>
 		<track name="will_trans_x"/>
-		<track name="will_trans_y"/>
+		<track name="will_trans_y">
+			<key interpolation="0" value="0.1" row="0"/>
+		</track>
 		<track name="will_trans_z"/>
 		<track name="will_scale_x">
 			<key interpolation="0" value="1" row="0"/>
@@ -64,6 +66,26 @@
 		</track>
 		<track name="floor_scale_z">
 			<key interpolation="0" value="5" row="0"/>
+		</track>
+		<track name="teapot_rot_x"/>
+		<track name="teapot_rot_y"/>
+		<track name="teapot_rot_z"/>
+		<track name="teapot_rot_�"/>
+		<track name="teapot_trans_x"/>
+		<track name="teapot_trans_y">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="teapot_trans_z">
+			<key interpolation="0" value="0" row="0"/>
+		</track>
+		<track name="teapot_scale_x">
+			<key interpolation="0" value="1" row="0"/>
+		</track>
+		<track name="teapot_scale_y">
+			<key interpolation="0" value="1" row="0"/>
+		</track>
+		<track name="teapot_scale_z">
+			<key interpolation="0" value="1" row="0"/>
 		</track>
 	</tracks>
 	<bookmarks/>
